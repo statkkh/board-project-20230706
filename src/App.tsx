@@ -1,21 +1,9 @@
 import { useState } from 'react';
 import './App.css';
-import InputBox from 'components/InputBox';
 
 function App() {
-
-  const [email, setEmail] = useState<string>('');
-  const [passowrd, setPassword] = useState<string>('');
-
-  const onPasswordIconClickHandler = () => {
-
-  }
-
   return (
-    <>
-      <InputBox label='이메일 주소' type='text' placeholder='이메일 주소를 입력해주세요.' value={email} setValue={setEmail} />
-      <InputBox label='비밀번호' type='password' placeholder='비밀번호를 입력해주세요.' value={passowrd} setValue={setPassword} icon='eye-off-icon' onButtonClick={onPasswordIconClickHandler} />
-    </>
+    <></>
   );
 }
 

@@ -5,6 +5,7 @@ import './style.css';
 interface Props {
   label: string;
   type: 'text' | 'password';
+  error: boolean;
   placeholder: string;
   value: string;
   setValue: Dispatch<SetStateAction<string>>
@@ -17,7 +18,7 @@ interface Props {
 export default function InputBox(props: Props) {
 
   //          state: Properties          //
-  const { label, type, placeholder, value, icon, errorMessage } = props;
+  const { label, type, error, placeholder, value, icon, errorMessage } = props;
   const { setValue, onButtonClick } = props;
 
   //          event handler: input 값 변경 이벤트 처리          //
@@ -30,7 +31,7 @@ export default function InputBox(props: Props) {
   return (
     <div className='inputbox'>
       <div className='inputbox-label'>{label}</div>
-      <div className={errorMessage ? 'inputbox-container-error' : 'inputbox-container'}>
+      <div className={error ? 'inputbox-container-error' : 'inputbox-container'}>
         <input className='input' type={type} placeholder={placeholder} value={value} onChange={onInputValueChangeHandler} />
         {onButtonClick !== undefined && (
           <div className='icon-button' onClick={onButtonClick}>
