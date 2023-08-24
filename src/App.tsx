@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import './App.css';
 import BoardListItem from 'components/BoardListItem';
+import { currentBoardListMock } from 'mocks';
 
 function App() {
   return (
     <>
-      <BoardListItem />
+      { currentBoardListMock.map((item) => (<BoardListItem boardItem={item} />)) }
     </>
   );
 }
