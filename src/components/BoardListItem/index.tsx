@@ -2,7 +2,15 @@ import React from 'react';
 import './style.css';
 import DefaultProfileImage from 'assets/default-profile-image.png';
 
+//          interface: 게시물 리스트 아이템 컴포넌트 Props          //
+interface Props {
+  boardItem: any;
+}
+
+//          component: 게시물 리스트 아이템 컴포넌트          //
 export default function BoardListItem() {
+  // TODO: 타이틀과 내용 초과 범위 처리
+  //          render: 게시물 리스트 아이템 컴포넌트 렌더링         //
   return (
     <div className='board-list-item-card'>
       <div className='board-list-item-main-box'>
