@@ -5,9 +5,9 @@ import { commentListMock } from 'mocks';
 
 function App() {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
       { commentListMock.map((commentItem) => (<CommentListItem commentItem={commentItem} />)) }
-    </>
+    </div>
   );
 }
 
