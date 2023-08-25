@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import './App.css';
-import BoardListItem from 'components/BoardListItem';
-import { currentBoardListMock } from 'mocks';
+import CommentListItem from 'components/CommentListItem';
+import { commentListMock } from 'mocks';
 
 function App() {
   return (
     <>
-      { currentBoardListMock.map((item) => (<BoardListItem boardItem={item} />)) }
+      { commentListMock.map((commentItem) => (<CommentListItem commentItem={commentItem} />)) }
     </>
   );
 }

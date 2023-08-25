@@ -1,3 +1,7 @@
-import BoardItem from './board-list-item.interface';
+import BoardItem from './board-item.interface';
+import CommentItem from './comment-item.interface';
 
-export type { BoardItem };
+export type { 
+    BoardItem,
+    CommentItem
+ };
