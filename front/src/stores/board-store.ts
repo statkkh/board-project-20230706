@@ -30,6 +30,7 @@ const useBoardStore = create<BoardStore>( (set) => ( {
     setImage: (image  : File | null  ) => { set( ( state ) => ( {...state, image} ) )},
 
     resetBoard: () => { set( (state) => ({ ...state, title : '', contents : '', image : null}))}
+
 }) );
 
 export default useBoardStore;

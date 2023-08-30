@@ -110,6 +110,7 @@ export default function Header() {
     return (
       <div className='login-button' onClick={onLoginButtonClickHandler}>로그인</div>
     );
+
   };
 
   //          component: 업로드 버튼 컴포넌트          //
@@ -135,6 +136,7 @@ export default function Header() {
     return (<div className='upload-button' onClick={onUploadButtonClickHandler}>업로드</div>);
     //          render: 업로드 버튼 (disable) 컴포넌트 렌더링          //
     return (<div className='upload-button-disable'>업로드</div>);
+    
   }
 
   //          component: 유저 페이지 버튼 컴포넌트          //
@@ -157,6 +159,7 @@ export default function Header() {
     return (<div className='logout-button' onClick={onLogoutButtonClickHandler}>로그아웃</div>);
     //          render: 타인 페이지 일 때 버튼 컴포넌트 렌더링          //
     return (<LoginMyPageButton />);
+
   }
 
   //          effect: un마운트시에만 실행될 함수          //
