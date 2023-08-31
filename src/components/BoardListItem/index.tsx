@@ -1,7 +1,9 @@
 import React from 'react';
 import './style.css';
-import DefaultProfileImage from 'assets/default-profile-image.png';
+// import DefaultProfileImage from 'assets/default-profile-image.png';
+import DefaultProfileImage from "assets/default-profile-image.png";
 import { BoardItem } from 'types';
+
 
 //          interface: 게시물 리스트 아이템 컴포넌트 Props          //
 interface Props {

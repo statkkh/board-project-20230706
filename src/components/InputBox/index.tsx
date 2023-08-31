@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React, { ChangeEvent, Dispatch, KeyboardEvent,MutableRefObject, SetStateAction ,forwardRef, useRef} from 'react';
 import './style.css';
 
 //          interface: Input 상자 컴포넌트 Props          //
@@ -11,6 +11,7 @@ interface Props {
   setValue: Dispatch<SetStateAction<string>>
   icon?: string;
   errorMessage?: string;
+  onKeyDown?: (event : KeyboardEvent<HTMLInputElement>) => void;
   onButtonClick?: () => void;
 }
 
@@ -18,7 +19,7 @@ interface Props {
 export default function InputBox(props: Props) {
 
   //          state: Properties          //
-  const { label, type, error, placeholder, value, icon, errorMessage } = props;
+  const { label, type, error, placeholder, value, icon,onKeyDown, errorMessage } = props;
   const { setValue, onButtonClick } = props;
 
   //          event handler: input 값 변경 이벤트 처리          //
@@ -27,12 +28,18 @@ export default function InputBox(props: Props) {
     setValue(value);
   }
 
+  //          event handler: input 값 변경 이벤트 처리          //
+  const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (!onKeyDown) return;
+    onKeyDown(event);
+  }  
+
   //          render: Input 상자 렌더링         //
   return (
-    <div className='inputbox'>
+    <div className='nputbox'>
       <div className='inputbox-label'>{label}</div>
       <div className={error ? 'inputbox-container-error' : 'inputbox-container'}>
-        <input className='input' type={type} placeholder={placeholder} value={value} onChange={onInputValueChangeHandler} />
+        <input className='input' type={type} placeholder={placeholder} value={value} onChange={onInputValueChangeHandler} onKeyDown={onKeyDownHandler} />
         {onButtonClick !== undefined && (
           <div className='icon-button' onClick={onButtonClick}>
             {icon !== undefined && <div className={icon}></div>}
