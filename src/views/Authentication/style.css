@@ -21,7 +21,7 @@
 }
 
 .auth-jumbotron-box {
-    grid-column: 0 / 1;
+    grid-column: 1 / 2;
 
     height: 100%;
 
@@ -98,12 +98,20 @@
     line-height: 140%;
 }
 
-
 .auth-card-bottom {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
+
+.auth-card-title-page {
+    color: rgba(0, 0, 0, 0.7);
+
+    font-size: 24px;;
+    font-weight: 600;
+    line-height: 140%;
+}
+
 
 .auth-sign-in-error-message {
     color: rgba(255, 0, 0, 0.7);
