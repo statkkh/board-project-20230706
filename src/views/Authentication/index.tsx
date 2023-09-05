@@ -22,7 +22,6 @@ export default function Authentication() {
   //          component: sign in 카드 컴포넌트          //
   const SignInCard = () => {
     const [email, setEmail] = useState<string>('');
-    const [emailError, setEmailError] = useState<boolean>(false);
     const [password, setPassword] = useState<string>('');
     const [passwordType, setPasswordType] = useState<'text' | 'password'>('password');
     const [passwordIcon, setPasswordIcon] = useState<'eye-off-icon' | 'eye-on-icon'>('eye-off-icon');
@@ -84,16 +83,16 @@ export default function Authentication() {
           <InputBox label='비밀번호' type={passwordType} placeholder='비밀번호를 입력해주세요.' error={error} value={password} setValue={setPassword} icon={passwordIcon} onKeyDown={onPasswordKeyDownHanlder}  onButtonClick={onPasswordIconClickHandler} />
         </div>
         <div className='auth-card-bottom'>
-          { error && (
-            <div className='auth-sign-in-error-box'>
-              <div className='auth-sign-in-error-message'>
-                {'이메일 주소 또는 비밀번호를 잘못 입력했습니다.\n입력하신 내용을 다시 확인해주세요.'}
-              </div>
+        { error && (
+          <div className='auth-sign-in-error-box'>
+            <div className='auth-sign-in-error-message'>
+              {'이메일 주소 또는 비밀번호를 잘못 입력했습니다.\n입력하신 내용을 다시 확인해주세요.'}
             </div>
-          )}
+          </div>
+        )}
             <div className='auth-button' onClick={onSignInButtonClickHandler}>{'로그인'}</div>
-              <div className='auth-description-box' >
-            <div className='auth-description'>{'신규 사용자이신가요? '} <span className='description-emphasis' onClick={onSignUpLinkClickHandler}>{'회원가입'}</span></div>
+            <div className='auth-description-box' >
+              <div className='auth-description'>{'신규 사용자이신가요? '} <span className='description-emphasis' onClick={onSignUpLinkClickHandler}>{'회원가입'}</span></div>
           </div>
         </div>
       </div>
@@ -103,7 +102,7 @@ export default function Authentication() {
     //          component: sign up 카드 컴포넌트          //  
     const SignUpCard = () => {
       //          state: 페이지 번호 상태          //
-      const [page, setPage] = useState<1 | 2>(1);    
+      const [page, setPage] = useState<1 | 2>(2);    
       //          state: 이메일 상태          //
       const [email, setEmail] = useState<string>('');
       //          state: 이메일 에러 상태          //
@@ -152,10 +151,13 @@ export default function Authentication() {
       //          state: 주소 에러 상태          //
       const [addressError, setAddressError] = useState<boolean>(false);
       //          state: 주소 에러 메세지 상태          //
-      const [addressErrorMessage, setAddressErrorMessage] = useState<string>('');
-  
+      const [addressErrorMessage, setAddressErrorMessage] = useState<string>('');    
       //          state: 상세 주소 상태          //
       const [addressDetail, setAddressDetail] = useState<string>('');
+      //          state: 개인정보동의 상태          //
+      const [consent, setConsent] = useState<boolean>(false);
+      //          state: 개인정보동의 에러 상태          //
+      const [consentError, setConsentError] = useState<boolean>(false);    
       //          function: 다음 주소 검색 팝업 오픈 함수          //
       const open = useDaumPostcodePopup();      
 
@@ -225,6 +227,12 @@ export default function Authentication() {
 
       setPage(2);
     }
+      //          event handler: 개인정보동의 체크 이벤트 처리          //
+      const onConsentCheckHandler = () => {
+        setConsent(!consent);
+      }
+    
+
     //          event handler: 회원가입 버튼 클릭 이벤트 처리          //
     const onSignUpButtonClickHandler = () => {
 
@@ -234,7 +242,7 @@ export default function Authentication() {
       setTelNumberErrorMessage('');
       setAddressError(false);
       setAddressErrorMessage('');
-
+      setConsentError(false);    
       // description: 닉네임 입력 여부 확인 //
       const checkedNickname = nickname.trim().length === 0;
       if (checkedNickname) {
@@ -254,8 +262,10 @@ export default function Authentication() {
         setAddressError(true);
         setAddressErrorMessage('우편번호를 선택해주세요.');
       }
+      // description: 개인정보동의 여부 확인 //
+      if (!consent) setConsentError(true);
 
-      if (checkedNickname || checkedTelNumber || checkedAddress) return;
+      if (checkedNickname || checkedTelNumber || checkedAddress || !consent) return;
 
       // TODO: 회원가입 처리 및 응답 처리
 
@@ -282,11 +292,18 @@ export default function Authentication() {
             </>)}
           </div>
           <div className='auth-card-bottom'>
-            {page == 1 && (<>
+            {page === 1 && (<>
               <div className="auth-button" onClick={onNextStepButtonClickHandler} >{'다음단계'}</div>
             </>)}
             {page ===2 && (<>
-              <div className="auth-button" onClick={onNextStepButtonClickHandler} >{'회원가입'}</div>
+              <div className='auth-consent-box'> 
+                <div  className='auth-check-box' onClick={onConsentCheckHandler}>
+                  {consent ? (<div className='check-round-fill-icon'></div>) : (<div className='check-ring-light-icon'></div>)}
+                </div>    
+                <div className={consentError ? 'auth-consent-title-error' : 'auth-consent-title'}>{'개인정보동의'}</div>   
+                <div className='auth-consent-link'>{'더보기>'}</div>
+              </div>  
+              <div className="auth-button" onClick={onSignUpButtonClickHandler} >{'회원가입'}</div>
             </>)}                
             <div className="auth-description-box">
                 <div className="auth-description">{'이미 계정이 있으신가요? '} <span className='description-emphasis'>{'로그인'}</span></div>

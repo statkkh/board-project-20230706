@@ -154,11 +154,10 @@ export default function Header() {
 
     //          variable: 마이페이지 여부 논리 변수          //
     const isMyPage = user && user.email === email;
-
     
     //          event handler: 로그아웃 버튼 클릭 이벤트 처리          //
     const onLogoutButtonClickHandler = () => {
-      setCookies('email', '', { path: '/', expires: new Date() });
+      setCookies('email', '', { path: '/', expires: new Date()});
       setUser(null);
     }
 
@@ -169,7 +168,7 @@ export default function Header() {
     return (<LoginMyPageButton />);
   }
     
-    //          effect: 마운트시에만 실행될 함수          //
+    //          effect: 마운트시에만 실행될 함수  다른 페이지 이동후  돌아올 때 글로벌 변수에 cookie  가져오기     //
     useEffect(() => {
       if(cookies.email){
         const user:LoginUser = {email : cookies.email, nickname : '루니엘', profileImage : null};

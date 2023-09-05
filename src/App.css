@@ -39,3 +39,21 @@
   background-position: 50% 50%;
   background-size: 100% 100%;
 }
+
+.check-ring-light-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/check-ring-light-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+.check-round-fill-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/check-round-fill-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
