@@ -271,7 +271,7 @@ export default function Authentication() {
 
       setView('sign-in');
     }      
-
+      //render :  sign up 카드 컴포넌트 렌더링     //
       return (
         <div className='auth-card'>
           <div className="auth-card-top">
@@ -284,7 +284,7 @@ export default function Authentication() {
             <InputBox label='비밀번호*' type={passwordType} placeholder='비밀번호를 입력해주세요.' value={password} setValue={setPassword} icon={passwordIcon} error={passwordError} errorMessage={passwordErrorMessage} onButtonClick={onPasswordIconClickHandler}/>
             <InputBox label='비밀번호 확인 *' type={passwordCheckType} placeholder='비밀번호를 다시 입력해주세요.' value={passwordCheck} icon={passwordCheckIcon} setValue={setPasswordCheck} error = {passwordCheckError} errorMessage={passwordCheckErrorMessage} onButtonClick={onPasswordCheckIconClickHandler} />
             </>)}
-            {page === 2 && (<>
+            { page === 2 && (<>
               <InputBox label='닉네임' type='text'  placeholder='닉네임을 입력해주세요.' value={nickname} setValue={setNickname} error={nicknameError} errorMessage={nicknameErrorMessage} />
               <InputBox label='핸드폰 번호*' type='text' placeholder='핸드폰 번호를 입력해주세요.' value={telNumber} setValue={setTelNumber}   icon={passwordCheckIcon}   error={telNumberError} errorMessage={telNumberErrorMessage} />
               <InputBox label='주소*' type='text' placeholder='우편번호 찾기' value={address} setValue={setAddress} icon='right-arrow-icon' error={addressError} errorMessage={addressErrorMessage} onButtonClick={onAddressIconClickHandler} />
@@ -292,10 +292,10 @@ export default function Authentication() {
             </>)}
           </div>
           <div className='auth-card-bottom'>
-            {page === 1 && (<>
+            { page === 1 && (<>
               <div className="auth-button" onClick={onNextStepButtonClickHandler} >{'다음단계'}</div>
             </>)}
-            {page ===2 && (<>
+            { page === 2 && (<>
               <div className='auth-consent-box'> 
                 <div  className='auth-check-box' onClick={onConsentCheckHandler}>
                   {consent ? (<div className='check-round-fill-icon'></div>) : (<div className='check-ring-light-icon'></div>)}
