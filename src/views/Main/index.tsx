@@ -46,7 +46,7 @@ export default function Main() {
     //          state: 인기 검색어 리스트 상태          //
     const [popularWordList, setPopularWordList] = useState<string[]>([]);
     //          state: 페이지네이션 관련 상태          //
-    const {currentPageNumber, setCurrentPageNumber, currentSectionNumber, setCurrentSectionNumber, viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination();
+    const {currentPageNumber, setCurrentPageNumber, currentSectionNumber, setCurrentSectionNumber, viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination<BoardItem>(5);
 
     //          function: 네비게이트 함수          //
     const navagator = useNavigate();

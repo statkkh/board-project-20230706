@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import './style.css';
 import { boardMock, relationWordListMock, searchListMock } from 'mocks';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,13 +6,14 @@ import { usePagination } from 'components/hooks';
 import { SEARCH_PATH } from 'constant';
 import BoardListItem from 'components/BoardListItem';
 import Pagination from 'components/Pagination';
+import { BoardItem } from 'types';
 
 export default function Search() {
   
 
   const {word} = useParams();
 
-  const {currentPageNumber, currentSectionNumber, setCurrentPageNumber, setCurrentSectionNumber, viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination(); 
+  const {currentPageNumber, currentSectionNumber, setCurrentPageNumber, setCurrentSectionNumber, viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination<BoardItem>(5); 
 
   //          state: 검색 결과 개수 상태          //
   const [count, setCount] = useState<number>(0);   
