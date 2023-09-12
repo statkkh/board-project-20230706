@@ -23,7 +23,7 @@ function App() {
         <Route path={BOARD_WRITE_PATH} element={<BoardWrite />} />
         <Route path={BOARD_DETAIL_PATH(':boardNumber')} element={<BoardDetail />} />
         <Route path={BOARD_UPDATE_PATH(':boardNumber')} element={<BoardUpdate />} />
-        <Route path={USER_PATH(':email')} element={<User />} />
+        <Route path={USER_PATH(':searchEmail')} element={<User />} />
         <Route path='*' element={<h1>404 Not Found</h1>} />        
       </Route>
     </Routes>  

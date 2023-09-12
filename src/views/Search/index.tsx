@@ -13,7 +13,8 @@ export default function Search() {
 
   const {word} = useParams();
 
-  const {currentPageNumber, currentSectionNumber, setCurrentPageNumber, setCurrentSectionNumber, viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination<BoardItem>(5); 
+  const {currentPageNumber, currentSectionNumber, setCurrentPageNumber, setCurrentSectionNumber,
+     viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination<BoardItem>(5); 
 
   //          state: 검색 결과 개수 상태          //
   const [count, setCount] = useState<number>(0);   
