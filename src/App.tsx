@@ -1,7 +1,5 @@
-import Header from 'layouts/Header';
 import './App.css';
-import Footer from 'layouts/Footer';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Container from 'layouts/Container';
 import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, USER_PATH } from 'constant';
 import Main from 'views/Main';
@@ -11,8 +9,29 @@ import BoardDetail from 'views/Board/Detail';
 import BoardWrite from 'views/Board/Write';
 import Authentication from 'views/Authentication';
 import Search from 'views/Search';
+import { useEffect } from 'react';
+import axios from 'axios';
+
+
+    // const response = await axios.get("http://localhost:4000");
+// ! 
 
 function App() {
+  const  serverCheck = async () =>{
+    const response = await axios.get("http://localhost:4000")
+    console.log(response);
+  }
+  // !2번 작동 비동기로 처리 //
+  // !  then : 함수 끝내고 작업 처리
+  // ! 함수 작업을 끝내고 then으로 받음 //
+  // ! data -> servercheck를 받음 //
+  useEffect(()=>{
+    serverCheck()
+      .then((data)=>{ console.log(data);})
+      .catch((error)=>{
+        console.log(error.response.data);
+      });
+  },[]);
   
   return (
     <Routes>

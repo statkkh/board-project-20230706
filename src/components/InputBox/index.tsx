@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, KeyboardEvent,MutableRefObject, SetStateAction ,forwardRef, useRef} from 'react';
+import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction ,forwardRef, useRef} from 'react';
 import './style.css';
 
 //          interface: Input 상자 컴포넌트 Props          //

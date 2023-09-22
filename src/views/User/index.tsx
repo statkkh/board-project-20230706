@@ -128,6 +128,8 @@ export default function User() {
       else navigator(USER_PATH(user.email));
     }
 
+    
+
     //          effect: 조회하는 유저의 이메일이 변경될 때 마다 실행할 함수 //
     useEffect(() => {
       setBoardList(userBoardListMock);

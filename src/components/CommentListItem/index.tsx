@@ -1,4 +1,3 @@
-import React from 'react';
 import './style.css';
 import { CommentItem } from 'types';
 import DefaultProfileImage from 'assets/default-profile-image.png'
@@ -22,7 +21,7 @@ export default function CommentListItem({ commentItem }: Props) {
           <div className='comment-list-item-profile-image' style={{ backgroundImage: `url(${profileImageUrl ? profileImageUrl : DefaultProfileImage})` }}></div>
         </div>
         <div className="comment-list-item-nickname">{nickname}</div>
-        <div className="comment-list-item-divider">{'\|'}</div>
+        <div className="comment-list-item-divider">{"\|"}</div>
         <div className="comment-list-item-time">{writeDatetime}</div>
       </div>
       <div className='comment-list-item-main'>

@@ -68,7 +68,7 @@ export default function BoardDetail() {
           <div className='board-detail-sub-box'>
             <div className="board-detail-write-info-box">
               <div className= 'board-detail-writer-profile-image' style={{ backgroundImage: `url(${DefaultProfileImage})` }}></div>
-              <div className= 'board-detail-writer-nickname' >{board?.nickname}</div>
+              <div className= 'board-detail-writer-nickname' onClick={onNicknameClickHandler} >{board?.nickname}</div>
               <div className="board-detail-info-divider">{'\|'}</div>
               <div className="board-detail-write-date">{board?.writeDatetime}</div>
             </div>
@@ -79,9 +79,9 @@ export default function BoardDetail() {
               )}
               {showMore && (
               <div className='more-box'>
-                <div className='more-update-button'>{'수정'}</div>
+                <div className='more-update-button' onClick={onUpdateButtonClickHandler}>{'수정'}</div>
                 <div className='divider'></div>
-                <div className='more-delete-button'>{'삭제'}</div>
+                <div className='more-delete-button' onClick={onDeleteButtonClickHandler}>{'삭제'}</div>
               </div>
               )}              
           </div>

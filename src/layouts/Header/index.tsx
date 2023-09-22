@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import './style.css';
 import { useLocation, useNavigate ,useParams } from 'react-router-dom';
 import { useUserStore ,useBoardStore} from 'stores';
