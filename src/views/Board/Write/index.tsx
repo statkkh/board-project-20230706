@@ -43,8 +43,58 @@ export default function BoardWrite() {
 
       setImageUrls(newImageUrls);
       setImages(newImages);
-    }      
+    }
+
+    //          event handler: 이미지 업로드 버튼 클릭 이벤트 처리          //
+    const onImageUploadButtonClickHandler = () => {
+      if (!imageInputRef.current) return;
+      imageInputRef.current.click();
+    }
+    
+    //          event handler: 이미지 닫기 버튼 클릭 이벤트 처리          //
+    const onImageCloseButtonClickHandler = (deleteIndex: number) => {
+      if (!imageInputRef.current) return;
+      imageInputRef.current.value = '';
+  
+      const newImageUrls = imageUrls.filter((url, index) => index !== deleteIndex);
+      setImageUrls(newImageUrls);
+      const newImages = images.filter((image, index) => index !== deleteIndex);
+      setImages(newImages);
+    }
+      
+    //          effect: 마운트 시 실행할 함수          //
+    useEffect(() => {
+      resetBoard();
+    }, []);
+
+  //          render: 게시물 작성 화면 렌더링          //    
   return (
-    <div>BoardWrite</div>
+    <div id='board-write-wrapper'>
+      <div className="board-write-container">
+        <div className="board-write-box">
+          <div className="board-write-title-box">
+            <input className='board-write-title-input' type='text' placeholder='제목을 작성해주세요.' value={title} onChange={onTitleChangeHandler} />
+          </div>
+          <div className='divider'></div>
+          <div className='board-write-contents-box'>
+            <textarea ref={contentsTextAreaRef} className='board-write-contents-textarea' placeholder='본문을 작성해주세요.' spellCheck={false} value={contents} onChange={onContentsChangeHandler} />
+            <input ref={imageInputRef} type='file' accept='image/*' style={{ display: 'none' }} onChange={onImageChangeHandler} />
+            <div className='icon-button' onClick={onImageUploadButtonClickHandler}>
+              <div className='image-box-light-icon'></div>    
+            </div>
+          </div>
+          <div className="board-write-images-box">
+            {imageUrls.map((imageUrl, index) => (
+              <div className='board-write-image-box'>
+                <img className='board-write-image' src={imageUrl} />
+                <div className='icon-button image-close' onClick={() => onImageCloseButtonClickHandler(index)}>
+                  <div className='close-icon'></div>
+                </div>
+              </div>
+              ))}              
+          </div>
+        </div>  
+      </div>    
+    </div>
   )
 }
