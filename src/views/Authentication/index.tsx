@@ -1,15 +1,15 @@
 import { useState, KeyboardEvent, useRef, } from 'react';
 import './style.css';
 import InputBox from 'components/InputBox';
-import { useUserStore } from 'stores';
+// import { useUserStore } from 'stores';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { MAIN_PATH } from 'constant';
-import { LoginUser } from 'types';
+// import { LoginUser } from 'types';
 import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
 import { signInRequest, signUpRequest } from 'apis';
 import { SignInRequestDto, SignUpRequestDto } from 'apis/dto/request/auth';
-import { SignInResponseDto ,SignUpResponseDto} from 'apis/dto/response/auth';
+import { SignInResponseDto } from 'apis/dto/response/auth';
 import ResponseDto from 'apis/dto/response';
 
 export default function Authentication() {
@@ -242,94 +242,94 @@ export default function Authentication() {
         const address = data.address;
         setAddress(address);
       }  
-    //          event handler: 다음 단계 버튼 클릭 이벤트 처리          //
-    const onNextStepButtonClickHandler = () => {
-      setEmailError(false);
-      setEmailErrorMessage('');
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-      setPasswordCheckError(false);
-      setPasswordCheckErrorMessage('');
+      //          event handler: 다음 단계 버튼 클릭 이벤트 처리          //
+      const onNextStepButtonClickHandler = () => {
+        setEmailError(false);
+        setEmailErrorMessage('');
+        setPasswordError(false);
+        setPasswordErrorMessage('');
+        setPasswordCheckError(false);
+        setPasswordCheckErrorMessage('');
 
-      // TODO: 이메일 패턴 확인 //
-      // description: 이메일 패턴 확인 //
-      const emailPattern = /^[a-zA-Z0-9]*@([-.]?[a-zA-Z0-9])*\.[a-zA-Z]{2,4}$/;
-      const checkedEmail = !emailPattern.test(email);
-      if (checkedEmail) {
-        setEmailError(true);
-        setEmailErrorMessage('이메일주소 포맷이 맞지않습니다.');
-      }
+        // TODO: 이메일 패턴 확인 //
+        // description: 이메일 패턴 확인 //
+        const emailPattern = /^[a-zA-Z0-9]*@([-.]?[a-zA-Z0-9])*\.[a-zA-Z]{2,4}$/;
+        const checkedEmail = !emailPattern.test(email);
+        if (checkedEmail) {
+          setEmailError(true);
+          setEmailErrorMessage('이메일주소 포맷이 맞지않습니다.');
+        }
 
-      // description: 비밀번호 길이 확인 //
-      const checkedPassword = password.trim().length < 8;
-      if (checkedPassword) {
-        setPasswordError(true);
-        setPasswordErrorMessage('비밀번호는 8자 이상 입력해주세요.');
-      }
-      // description: 비밀번호 일치 여부 확인 //
-      const checkedPasswordCheck = password !== passwordCheck;
-      if (checkedPasswordCheck) {
-        setPasswordCheckError(true);
-        setPasswordCheckErrorMessage('비밀번호가 일치하지않습니다.');
-      }
+        // description: 비밀번호 길이 확인 //
+        const checkedPassword = password.trim().length < 8;
+        if (checkedPassword) {
+          setPasswordError(true);
+          setPasswordErrorMessage('비밀번호는 8자 이상 입력해주세요.');
+        }
+        // description: 비밀번호 일치 여부 확인 //
+        const checkedPasswordCheck = password !== passwordCheck;
+        if (checkedPasswordCheck) {
+          setPasswordCheckError(true);
+          setPasswordCheckErrorMessage('비밀번호가 일치하지않습니다.');
+        }
 
-      if (checkedPassword || checkedPasswordCheck) return;
+        if (checkedPassword || checkedPasswordCheck) return;
 
-      setPage(2);
-    }
-      //          event handler: 개인정보동의 체크 이벤트 처리          //
-      const onConsentCheckHandler = () => {
-        setConsent(!consent);
+        setPage(2);
       }
+        //          event handler: 개인정보동의 체크 이벤트 처리          //
+        const onConsentCheckHandler = () => {
+          setConsent(!consent);
+        }
     
 
-    //          event handler: 회원가입 버튼 클릭 이벤트 처리          //
-    const onSignUpButtonClickHandler = () => {
+        //          event handler: 회원가입 버튼 클릭 이벤트 처리          //
+        const onSignUpButtonClickHandler = () => {
 
-      setNicknameError(false);
-      setNicknameErrorMessage('');
-      setTelNumberError(false);
-      setTelNumberErrorMessage('');
-      setAddressError(false);
-      setAddressErrorMessage('');
-      setConsentError(false);    
-      // description: 닉네임 입력 여부 확인 //
-      const checkedNickname = nickname.trim().length === 0;
-      if (checkedNickname) {
-        setNicknameError(true);
-        setNicknameErrorMessage('닉네임을 입력해주세요.');
-      }
-      // description: 핸드폰 번호 입력 여부 확인 //
-      const telNumberPattern = /^[0-9]{10,12}$/;
-      const checkedTelNumber = !telNumberPattern.test(telNumber);
-      if (checkedTelNumber) {
-        setTelNumberError(true);
-        setTelNumberErrorMessage('숫자만 입력해주세요.');
-      }
-      // description: 주소 입력 여부 확인 //
-      const checkedAddress = address.trim().length === 0;
-      if (checkedAddress) {
-        setAddressError(true);
-        setAddressErrorMessage('우편번호를 선택해주세요.');
-      }
-      // description: 개인정보동의 여부 확인 //
-      if (!consent) setConsentError(true);
+          setNicknameError(false);
+          setNicknameErrorMessage('');
+          setTelNumberError(false);
+          setTelNumberErrorMessage('');
+          setAddressError(false);
+          setAddressErrorMessage('');
+          setConsentError(false);    
+          // description: 닉네임 입력 여부 확인 //
+          const checkedNickname = nickname.trim().length === 0;
+          if (checkedNickname) {
+            setNicknameError(true);
+            setNicknameErrorMessage('닉네임을 입력해주세요.');
+          }
+          // description: 핸드폰 번호 입력 여부 확인 //
+          const telNumberPattern = /^[0-9]{10,12}$/;
+          const checkedTelNumber = !telNumberPattern.test(telNumber);
+          if (checkedTelNumber) {
+            setTelNumberError(true);
+            setTelNumberErrorMessage('숫자만 입력해주세요.');
+          }
+          // description: 주소 입력 여부 확인 //
+          const checkedAddress = address.trim().length === 0;
+          if (checkedAddress) {
+            setAddressError(true);
+            setAddressErrorMessage('우편번호를 선택해주세요.');
+          }
+          // description: 개인정보동의 여부 확인 //
+          if (!consent) setConsentError(true);
 
-      if (checkedNickname || checkedTelNumber || checkedAddress || !consent) return;
+          if (checkedNickname || checkedTelNumber || checkedAddress || !consent) return;
 
-      // TODO: 회원가입 처리 및 응답 처리
-      const requestBody : SignUpRequestDto   = {
-        email,
-        password,
-        nickname,
-        telNumber,
-        address,
-        addressDetail,
-        agreedPersonal: consent
-      };
+          // TODO: 회원가입 처리 및 응답 처리
+          const requestBody : SignUpRequestDto   = {
+            email,
+            password,
+            nickname,
+            telNumber,
+            address,
+            addressDetail,
+            agreedPersonal: consent
+          };
 
-      signUpRequest(requestBody).then(signUpResponse);      
-    }      
+          signUpRequest(requestBody).then(signUpResponse);      
+        }      
       //render :  sign up 카드 컴포넌트 렌더링     //
       return (
         <div className='auth-card'>
@@ -372,22 +372,22 @@ export default function Authentication() {
       );
     }
    //          render: 인증 페이지 렌더링         //  
-  return(
-    <div id='auth-wrapper'> 
-      <div className='auth-container'>
-        <div className='auth-jumbotron-box'>
-          <div className='auth-jumbotron-contents'>
-            <div className='jumbotron-icon'></div>
-            <div className='auth-jumbotron-text-box'>
-              <div className='auth-jumbotron-text'>{'환영합니다.'}</div>
-              <div className='auth-jumbotron-text'>{'HOONS BOARD 입니다.'}</div>
+    return(
+      <div id='auth-wrapper'> 
+        <div className='auth-container'>
+          <div className='auth-jumbotron-box'>
+            <div className='auth-jumbotron-contents'>
+              <div className='jumbotron-icon'></div>
+              <div className='auth-jumbotron-text-box'>
+                <div className='auth-jumbotron-text'>{'환영합니다.'}</div>
+                <div className='auth-jumbotron-text'>{'HOONS BOARD 입니다.'}</div>
+              </div>
             </div>
           </div>
+          { view === 'sign-in' &&  <SignInCard/>}
+          { view === 'sign-up' &&  <SignUpCard/>}
         </div>
-        { view === 'sign-in' &&  <SignInCard/>}
-        { view === 'sign-up' &&  <SignUpCard/>}
-      </div>
-  </div>
-  );
+    </div>
+    );
 
 }
