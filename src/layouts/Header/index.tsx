@@ -46,8 +46,7 @@ export default function Header() {
         const [showInput, setShowInput] = useState<boolean>(false);
         //          state: 검색 값 상태          //
         const [searchValue, setSearchValue] = useState<string>('');   
-        //       state: cookie 상태          //
-        const [cookies, setCookies] = useCookies();    
+   
           
         //          event handler: 검색 값 변경 이벤트 처리          //
         const onSearchValueChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -112,7 +111,7 @@ export default function Header() {
         navigator(AUTH_PATH);
       }
     //          render: 마이페이지 버튼 컴포넌트 렌더링 (로그인 상태일 때)         //
-      if (cookies.email)
+      if (cookies.accessToken )
       return (
         <div className='mypage-button' onClick={onMyPageButtonClickHandler}>마이페이지</div>
       );
@@ -125,7 +124,7 @@ export default function Header() {
   const UploadButton = () => {
 
     //          state: 게시물 제목, 내용, 이미지 전역 상태          //
-    const { title, contents, image, resetBoard } = useBoardStore();
+    const { title, contents, images, resetBoard } = useBoardStore();
 
     //          event handler: 업로드 버튼 클릭 이벤트 처리          //
     const onUploadButtonClickHandler = () => {

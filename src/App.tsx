@@ -1,37 +1,66 @@
 import './App.css';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes,useLocation } from 'react-router-dom';
 import Container from 'layouts/Container';
 import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, USER_PATH } from 'constant';
 import Main from 'views/Main';
 import User from 'views/User';
+import Authentication from 'views/Authentication';
 import BoardUpdate from 'views/Board/Update';
 import BoardDetail from 'views/Board/Detail';
 import BoardWrite from 'views/Board/Write';
-import Authentication from 'views/Authentication';
 import Search from 'views/Search';
 import { useEffect } from 'react';
-import axios from 'axios';
+import { useCookies } from 'react-cookie';
+import { useUserStore } from 'stores';
+import { getSignInUserRequest } from 'apis';
+import { GetSignInUserResponseDto } from 'apis/dto/response/user';
+import ResponseDto from 'apis/dto/response';
 
-
-    // const response = await axios.get("http://localhost:4000");
-// ! 
+// const response = await axios.get("http://localhost:4000");
 
 function App() {
-  const  serverCheck = async () =>{
-    const response = await axios.get("http://localhost:4000")
-    console.log(response);
-  }
+  // const  serverCheck = async () =>{
+  //   const response = await axios.get("http://localhost:4000")
+  //   console.log(response);
+  // }
   // !2번 작동 비동기로 처리 //
   // !  then : 함수 끝내고 작업 처리
   // ! 함수 작업을 끝내고 then으로 받음 //
   // ! data -> servercheck를 받음 //
-  useEffect(()=>{
-    serverCheck()
-      .then((data)=>{ console.log(data);})
-      .catch((error)=>{
-        console.log(error.response.data);
-      });
-  },[]);
+  // useEffect(()=>{
+  //   serverCheck()
+  //     .then((data)=>{ console.log(data);})
+  //     .catch((error)=>{
+  //       console.log(error.response.data);
+  //     });
+  // },[]);
+  // description : 현재 쿠키 상태
+  const [cookies, setCookies] = useCookies();
+  // description : login user state //
+  const { user, setUser} = useUserStore();
+  // description : 현재 페이지 url 상태  ///
+  const {pathname } = useLocation();
+
+  //  description  get Sign in user response 처리 함수 // 
+  const getSignInUserResponse = (responseBody : GetSignInUserResponseDto | ResponseDto) =>{
+    const {code} = responseBody;
+    if(code !== "SU"){
+      setCookies('accessToken' ,'', {expires: new Date(), path : MAIN_PATH});
+      setUser(null);
+      return;
+    }
+    setUser({...responseBody } as GetSignInUserResponseDto);
+  }
+
+  // effect : 현재 path가 변경될 떄마다 실행될 함수  //
+  useEffect( ()=>{
+    const accessToken = cookies.accessToken;
+    if(!accessToken){
+      setUser(null);
+      return;
+    }    
+    getSignInUserRequest(accessToken).then(getSignInUserResponse)
+  },[pathname]);
   
   return (
     <Routes>

@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import { boardMock } from 'mocks';
 import { convertUrlsToFiles } from 'utils';
 
+//          component: 게시물 수정 화면          //
+export default function BoardUpdate() {
 
   //          state: 이미지 인풋 ref 상태          //
   const imageInputRef = useRef<HTMLInputElement | null>(null);
@@ -71,13 +73,8 @@ import { convertUrlsToFiles } from 'utils';
     convertUrlsToFiles(imageUrls).then(files => setImages(files));
     setImageUrls(imageUrls);
   }, [boardNumber]);
-  
 
-
-
-//          render: 게시물 수정 화면 렌더링          //
-export default function BoardUpdate() {
-
+  //          render: 게시물 수정 화면 렌더링          //
   return (
     <div id='board-write-wrapper'>
       <div className='board-write-container'>
