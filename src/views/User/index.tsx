@@ -12,6 +12,8 @@ import { usePagination } from 'components/hooks';
 import userMock from 'mocks/user.mock';
 import userBoardListMock from 'mocks/user-board-list.mock';
 import { getUserRequest } from 'apis';
+import { GetUserReponseDto } from 'apis/dto/response/user';
+import ResponseDto from 'apis/dto/response';
 
 //          component: 유저 페이지          //
 export default function User() {
@@ -38,6 +40,21 @@ export default function User() {
     const [nickname, setNickname] = useState<string>('나는주코야키');
     //          state: 닉네임 변경 상태           //
     const [showChangeNickname, setShowChangeNickname] = useState<boolean>(false);
+
+    //  function : get user response 처리 함수 
+    const getUserResponse = ( responseBody : GetUserReponseDto | ResponseDto) => {
+      const {code} = responseBody;
+      if(code === 'NU') alert("존재하지 않는 유저입니다.");
+      if(code === 'DBE') alert("데이터베이스 오류입니다."); 
+      if(code !== 'SU'){
+        navigator(MAIN_PATH);
+        return;
+      }      
+      const {email, nickname, profileImage} = responseBody as GetUserReponseDto;
+      setEmail(email);
+      setNickname(nickname);
+      setProfileImage(profileImage);
+    }
 
     //          event handler: 프로필 이미지 클릭 이벤트 처리          //
     const onProfileImageClickHandler = () => {
@@ -77,7 +94,7 @@ export default function User() {
         <div className='user-info-container'>
           <div className={isMyPage ? 'user-info-profile-image-box-mypage' : 'user-info-profile-image-box'} onClick={onProfileImageClickHandler}>
             <input ref={fileInputRef} type='file' accept='image/*' style={{ display: 'none' }} onChange={onProfileImageChangeHandler} />
-            {profileImage === '' ? (
+            {profileImage === null ? (
             <div className='user-info-profile-default-image'>
               <div className='user-info-profile-icon-box'>
                 <div className='image-box-white-icon'></div>
