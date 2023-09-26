@@ -2,7 +2,7 @@ import axios from "axios";
 import { SignInRequestDto, SignUpRequestDto } from "./dto/request/auth";
 import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
-import { GetSignInUserResponseDto } from "./dto/response/user";
+import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
 
 // description : api Domain 주소     //
 const API_DOMAIN = 'http://localhost:4000/api/v1';
@@ -49,6 +49,9 @@ export const signInRequest = async (requestBody : SignInRequestDto) =>{
 // description : get sign in use API end Point Request //
 const GET_SIGN_IN_USER_URL = async() => `${(API_DOMAIN)}/auth/sign-in`;
 
+const GET_USER_URL = (email : string) => `${API_DOMAIN}/user/${email}`;
+
+
 // description :  get sign in request //
 export const getSignInUserRequest = async (token : string) =>{
     const result = await axios.get(await GET_SIGN_IN_USER_URL(), authorization(token))
@@ -62,3 +65,18 @@ export const getSignInUserRequest = async (token : string) =>{
         });
     return result;    
 };
+
+// description : get user request  //
+export const getUserRequest = async(email : string ) =>{
+    const result = await axios.get(GET_USER_URL(email))
+            .then(response =>{
+                const responseBody : GetUserReponseDto = response.data;
+                return responseBody; 
+            })
+            .catch(error=>{
+                const responseBody : ResponseDto = error.response.data;
+                return responseBody;
+            })
+
+    return result;
+}

@@ -7,10 +7,11 @@ import { useUserStore } from 'stores';
 import { BoardItem } from 'types';
 import BoardListItem from 'components/BoardListItem';
 import Pagination from 'components/Pagination';
-import { AUTH_PATH, BOARD_WRITE_PATH, USER_PATH } from 'constant';
+import { AUTH_PATH, BOARD_WRITE_PATH, MAIN_PATH, USER_PATH } from 'constant';
 import { usePagination } from 'components/hooks';
 import userMock from 'mocks/user.mock';
 import userBoardListMock from 'mocks/user-board-list.mock';
+import { getUserRequest } from 'apis';
 
 //          component: 유저 페이지          //
 export default function User() {
@@ -21,6 +22,8 @@ export default function User() {
   const { user } = useUserStore();
   //          state: 본인 여부 상태           //
   const [isMyPage, setMyPage] = useState<boolean>(false);
+  //          function: 네비게이트 함수          //
+  const navigator = useNavigate();
 
   //          component: 유저 정보 컴포넌트          //
   const UserInfo = () => {
@@ -61,10 +64,11 @@ export default function User() {
 
     //          effect: 조회하는 유저의 이메일이 변경될 때 마다 실행할 함수          //
     useEffect(() => {
-      const { email, nickname, profileImage } = userMock;
-      setEmail(email);
-      setNickname(nickname);
-      setProfileImage(profileImage);
+      if(!searchEmail){
+        navigator(MAIN_PATH);
+        return;
+      }
+      getUserRequest(searchEmail).then(getUserResponse);
     }, [searchEmail]);
 
     //          render: 유저 정보 컴포넌트 렌더링          //
@@ -112,9 +116,6 @@ export default function User() {
     viewBoardList, viewPageNumberList, totalSection, setBoardList } = usePagination<BoardItem>(5);
     //          state: 게시물 개수 상태          //
     const [count, setCount] = useState<number>(0);
-
-    //          function: 네비게이트 함수          //
-    const navigator = useNavigate();
 
     //          event handler: 버튼 클릭 이벤트 처리          //
     const onButtonClickHandler = () => {
