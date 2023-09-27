@@ -3,6 +3,8 @@ import { SignInRequestDto, SignUpRequestDto } from "./dto/request/auth";
 import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
+import { PostBoardRequestDto } from "./dto/request/board";
+import { PostBoardResponseDto } from "./dto/response/board";
 
 // description : Domain URL //
 const DOMAIN = "http://localhost:4000";
@@ -28,7 +30,7 @@ export const signUpRequest = async (requestBody : SignUpRequestDto) =>{
             return code;
         })
         .catch(error =>{
-            const responseBody = Response = error.response.data;
+            const responseBody : ResponseDto = error.response.data;
             const {code} = responseBody;
             return code;
         });
@@ -48,6 +50,26 @@ export const signInRequest = async (requestBody : SignInRequestDto) =>{
         });                    
     return result;
 };
+
+// description :  post board API end Point //
+const POST_BOARD_URL =() => `${API_DOMAIN}/board`;
+
+// description :  post board request //
+export const postBoardRequest = async (requestBody : PostBoardRequestDto, token : string) => {
+    const result = await axios.post(POST_BOARD_URL(), requestBody, authorization(token))
+            .then(response =>{
+                const responseBody : PostBoardResponseDto = response.data;
+                const  { code} = responseBody;
+                return code;
+            })
+            .catch(error =>{
+                const responseBody : ResponseDto = error.response.data;
+                const {code} = responseBody;
+                return code;
+            });
+    return result;        
+
+}
 
 // description : get sign in use API end Point Request //
 const GET_SIGN_IN_USER_URL = async() => `${(API_DOMAIN)}/auth/sign-in`;

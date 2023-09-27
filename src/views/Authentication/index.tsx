@@ -1,8 +1,8 @@
-import { useState, KeyboardEvent, useRef, } from 'react';
+import { useState, KeyboardEvent, useRef } from 'react';
 import './style.css';
 import InputBox from 'components/InputBox';
 import { useCookies } from 'react-cookie';
-import { useUserStore } from 'stores';
+// import { useUserStore } from 'stores';
 
 // import { LoginUser } from 'types';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ import ResponseDto from 'apis/dto/response';
 export default function Authentication() {
 
     //          state: 로그인 유저 전역 상태          //
-    const { user, setUser } = useUserStore();
+    // const { user, setUser } = useUserStore();
 
     //          state: 쿠키 상태          //
     const [cookies, setCookie] = useCookies();    

@@ -5,7 +5,8 @@ import { useUserStore ,useBoardStore} from 'stores';
 import { useCookies } from 'react-cookie';
 import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, USER_PATH } from 'constant';
 import { LoginUser } from 'types';
-import { fileUploadRequest } from 'apis';
+import { fileUploadRequest, postBoardRequest } from 'apis';
+import { PostBoardRequestDto } from 'apis/dto/request/board';
 
 
 //          component: 헤더 컴포넌트          //
@@ -126,29 +127,53 @@ export default function Header() {
 
     //          state: 게시물 제목, 내용, 이미지 전역 상태          //
     const { title, contents, images, resetBoard } = useBoardStore();
+   
+    // function : post board response 처리 함수 //
+    const postBoardResponse = (code : string) =>{
+        if(code === 'VF') alert("모두 입력하세요.");
+        if(code === 'NU' || code === 'AF'){
+          navigator(AUTH_PATH);
+          return;
+        }
+        if(code === 'DBE') alert("데이터 베이스 오류입니다.");
+        if(code !== 'SU') return;
+        if(!user) return;
+        const {email} = user;
+        resetBoard();
+        // description : 마이 페이지 이동 //
+        navigator(USER_PATH(email));
+    }
 
     //          event handler: 업로드 버튼 클릭 이벤트 처리          //
     const onUploadButtonClickHandler = async () => {
 
+      const accessToken = cookies.accessToken;
+      if(!accessToken) return;
+
       const boardImageList : string[] = [];
 
-      images.forEach( async image => {
+      // description :java for each구문과 유사
+      for(const image of images) {
         const data =  new FormData();
         data.append('file',image);
 
         const url = await fileUploadRequest(data);
         if(url) boardImageList.push(url);
-        
-      })
+      }
+
 
       if (isBoardWritePage) {
-        alert('작성');
-        resetBoard();
+        const requestBody : PostBoardRequestDto = {
+          title, contents :  contents, boardImageList
+        }
+        postBoardRequest(requestBody, accessToken).then(postBoardResponse);
+       
       }
       if (isBoardUpdatePage) {
         alert('수정');
         resetBoard();
       }
+
     }
     
     //          render: 업로드 버튼 (Active) 컴포넌트 렌더링          //
