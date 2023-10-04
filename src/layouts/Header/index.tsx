@@ -8,7 +8,6 @@ import { LoginUser } from 'types';
 import { fileUploadRequest, postBoardRequest } from 'apis';
 import { PostBoardRequestDto } from 'apis/dto/request/board';
 
-
 //          component: 헤더 컴포넌트          //
 export default function Header() {
 
@@ -18,7 +17,6 @@ export default function Header() {
   const { user, setUser } = useUserStore();
   //          state: cookie 상태          //
   const [cookies, setCookies] = useCookies();
-
   
   //          variable: 인증 페이지 논리 변수          //
   const isAuthPage = pathname === AUTH_PATH;  
@@ -65,7 +63,7 @@ export default function Header() {
 
         //          event handler: 검색 버튼 클릭 이벤트 처리          //        
         const onSearchButtonClickHandler = () => {
-          // Check if the search input is visible.
+          // description : Check if the search input is visible.
           if(!showInput){  
             setShowInput(true);
             return;
@@ -137,9 +135,10 @@ export default function Header() {
         }
         if(code === 'DBE') alert("데이터 베이스 오류입니다.");
         if(code !== 'SU') return;
+
+        resetBoard(); 
         if(!user) return;
         const {email} = user;
-        resetBoard();
         // description : 마이 페이지 이동 //
         navigator(USER_PATH(email));
     }
@@ -161,10 +160,9 @@ export default function Header() {
         if(url) boardImageList.push(url);
       }
 
-
       if (isBoardWritePage) {
         const requestBody : PostBoardRequestDto = {
-          title, contents :  contents, boardImageList
+          title, content :  contents, boardImageList
         }
         postBoardRequest(requestBody, accessToken).then(postBoardResponse);
        
@@ -194,7 +192,7 @@ export default function Header() {
     
     //          event handler: 로그아웃 버튼 클릭 이벤트 처리          //
     const onLogoutButtonClickHandler = () => {
-      setCookies('email', '', { path: '/', expires: new Date()});
+      setCookies('accessToken', '', { path: '/', expires: new Date()});
       setUser(null);
     }
 

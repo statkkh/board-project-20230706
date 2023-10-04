@@ -1,23 +1,23 @@
+import React from 'react';
 import './style.css';
-// import DefaultProfileImage from 'assets/default-profile-image.png';
 import DefaultProfileImage from "assets/default-profile-image.png";
-import { BoardItem } from 'types';
+import { BoardListItem } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { BOARD_DETAIL_PATH } from 'constant';
 
 
 //          interface: 게시물 리스트 아이템 컴포넌트 Props          //
 interface Props {
-  boardItem: BoardItem;
+  boardItem: BoardListItem;
 }
 
 //          component: 게시물 리스트 아이템 컴포넌트          //
 export default function BoardListItem({ boardItem }: Props) {
 
   //          state: Properties          //
-  const { boardNumber, title, contents, imageUrl } = boardItem;
+  const { boardNumber, title, content, boardTitleImage } = boardItem;
   const { viewCount, commentCount, favoriteCount } = boardItem;
-  const { writeDatetime, nickname, profileImageUrl } = boardItem;
+  const { writeDatetime, writerNickname, writerProfileImageUrl } = boardItem;
 
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
@@ -35,16 +35,17 @@ export default function BoardListItem({ boardItem }: Props) {
       <div className='board-list-item-main-box'>
         <div className='board-list-item-top'>
           <div className='board-list-item-profile-box'>
-            <div className='board-list-item-profile-image' style={{ backgroundImage: `url(${profileImageUrl ? profileImageUrl : DefaultProfileImage})` }}></div>
+            <div className='board-list-item-profile-image' style={{ backgroundImage: `url(${writerProfileImageUrl ?  <div className='board-list-item-profile-image' style={{ backgroundImage: `url(${writerProfileImageUrl ? writerProfileImageUrl : DefaultProfileImage})` }}></div>
+ : DefaultProfileImage})` }}></div>
           </div>
           <div className='board-list-item-write-box'>
-            <div className='board-list-item-nickname'>{nickname}</div>
+            <div className='board-list-item-nickname'>{writerNickname}</div>
             <div className='board-list-item-write-date'>{writeDatetime}</div>
           </div>
         </div>
         <div className='board-list-item-middle'>
           <div className='board-list-item-title'>{title}</div>
-          <div className='board-list-item-contents'>{contents}</div>
+          <div className='board-list-item-contents'>{content}</div>
         </div>
         <div className='board-list-item-bottom'>
           <div className='board-list-item-counts'>
@@ -52,9 +53,9 @@ export default function BoardListItem({ boardItem }: Props) {
           </div>
         </div>
       </div>
-      { imageUrl !== null && (
+      { boardTitleImage !== null && (
         <div className='board-list-item-image-box'>
-          <div className='board-list-item-image' style={{ backgroundImage: `url(${imageUrl})` }}></div>
+          <div className='board-list-item-image' style={{ backgroundImage: `url(${boardTitleImage})` }}></div>
         </div>
       ) }
     </div>

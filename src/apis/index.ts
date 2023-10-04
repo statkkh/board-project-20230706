@@ -4,22 +4,23 @@ import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
 import { PostBoardRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto } from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto} from "./dto/response/board";
+import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 
 // description : Domain URL //
 const DOMAIN = "http://localhost:4000";
 
 // description : api Domain 주소     //
 const API_DOMAIN = `${DOMAIN}/api/v1`;
-// description : authrorization header //
+// description : Authorizaition header //
 const authorization = (token : string) =>  {
-    return {headers : {Authorization :`Bearer Token ${token}`}};
+    return {headers : {Authorization :`Bearer ${token}`} };
 };
 
 // description : sign up API end point // 
-const SIGN_UP_URL = () =>`${(API_DOMAIN)}/auth/sign-up`;
+const SIGN_UP_URL = () =>`${API_DOMAIN}/auth/sign-up`;
 // description : sign in API end point // 
-const SIGN_IN_URL = () =>`${(API_DOMAIN)}/auth/sign-in`;
+const SIGN_IN_URL = () =>`${API_DOMAIN}/auth/sign-in`;
 
 // description : sign up Request  타데이터 없음//
 export const signUpRequest = async (requestBody : SignUpRequestDto) =>{
@@ -51,35 +52,68 @@ export const signInRequest = async (requestBody : SignInRequestDto) =>{
     return result;
 };
 
+// description : get board API end Point //
+const GET_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
+// description : get latest board list API end point // 
+const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`;
 // description :  post board API end Point //
 const POST_BOARD_URL =() => `${API_DOMAIN}/board`;
+
+// description :  get board request //
+export const getBoardRequest = async(boardNumber : string | number)=>{
+    const result = await axios.get(GET_BOARD_URL(boardNumber))
+        .then(response =>{  
+            const responseBody : GetBoardResponseDto = response.data;
+            return responseBody; 
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.response.data;
+            const {code} = responseBody;
+            return code;
+        });
+        return result;          
+}
+
+// description : get latest board list requets  
+export const getLatestBoardListRequest= async()=>{
+    const result = await axios.get(GET_LATEST_BOARD_LIST_URL())
+        .then(response =>{   
+            const responseBody : GetLatestBoardListResponseDto = response.data;
+            return responseBody;            
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.response.data;
+            const {code} = responseBody;
+            return code;
+        });
+
+    return result;    
+}
 
 // description :  post board request //
 export const postBoardRequest = async (requestBody : PostBoardRequestDto, token : string) => {
     const result = await axios.post(POST_BOARD_URL(), requestBody, authorization(token))
-            .then(response =>{
-                const responseBody : PostBoardResponseDto = response.data;
-                const  { code} = responseBody;
-                return code;
-            })
-            .catch(error =>{
-                const responseBody : ResponseDto = error.response.data;
-                const {code} = responseBody;
-                return code;
-            });
+        .then(response =>{
+            const responseBody : PostBoardResponseDto = response.data;
+            const  { code } = responseBody;
+            return code;
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.response.data;
+            const {code} = responseBody;
+            return code;
+        });
     return result;        
-
 }
 
 // description : get sign in use API end Point Request //
-const GET_SIGN_IN_USER_URL = async() => `${(API_DOMAIN)}/auth/sign-in`;
-
+const GET_SIGN_IN_USER_URL = () => `${API_DOMAIN}/user`;
+// description: get user API end point //
 const GET_USER_URL = (email : string) => `${API_DOMAIN}/user/${email}`;
 
-
 // description :  get sign in request //
-export const getSignInUserRequest = async (token : string) =>{
-    const result = await axios.get(await GET_SIGN_IN_USER_URL(), authorization(token))
+export const getSignInUserRequest = async (token : string) => {
+    const result = await axios.get( GET_SIGN_IN_USER_URL(), authorization(token))
         .then(response =>{
             const responseBody : GetSignInUserResponseDto = response.data;
             return responseBody;
@@ -94,17 +128,17 @@ export const getSignInUserRequest = async (token : string) =>{
 // description : get user request  //
 export const getUserRequest = async(email : string ) =>{
     const result = await axios.get(GET_USER_URL(email))
-            .then(response =>{
-                const responseBody : GetUserReponseDto = response.data;
-                return responseBody; 
-            })
-            .catch(error=>{
-                const responseBody : ResponseDto = error.response.data;
-                return responseBody;
-            })
+        .then(response =>{
+            const responseBody : GetUserReponseDto = response.data;
+            return responseBody; 
+        })
+        .catch(error=>{
+            const responseBody : ResponseDto = error.response.data;
+            return responseBody;
+        })
 
     return result;
-}
+};
 
 // description : FILE DOMAIN 주소 //
 const FILE_DOMAIN = `${DOMAIN}/file`;
@@ -113,7 +147,7 @@ const FILE_DOMAIN = `${DOMAIN}/file`;
 const FILE_UPLOAD_URL = () => `${FILE_DOMAIN}/upload`;
 
 // description :  file content type Header //
-const multipart =  {headers : {'Content-Type' : 'multipart/form-data'}};
+const multipart =  {headers : {'Content-Type' : 'multipart/form-data'} };
 
 // description :  file upload request //
 export const fileUploadRequest = async (data : FormData) =>{
@@ -127,6 +161,6 @@ export const fileUploadRequest = async (data : FormData) =>{
             return null;
         }); 
 
-        return result;
+    return result;
 }   
  

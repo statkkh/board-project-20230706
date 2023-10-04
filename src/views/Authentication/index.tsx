@@ -1,10 +1,9 @@
-import { useState, KeyboardEvent, useRef } from 'react';
+import { KeyboardEvent,useState, useRef } from 'react';
 import './style.css';
 import InputBox from 'components/InputBox';
 import { useCookies } from 'react-cookie';
 // import { useUserStore } from 'stores';
 
-// import { LoginUser } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { MAIN_PATH } from 'constant';
 import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
@@ -18,10 +17,8 @@ export default function Authentication() {
 
     //          state: 로그인 유저 전역 상태          //
     // const { user, setUser } = useUserStore();
-
     //          state: 쿠키 상태          //
     const [cookies, setCookie] = useCookies();    
-
     //          state: 화면 상태          //
     const [view, setView] = useState<'sign-in' | 'sign-up'>('sign-in');
     
@@ -30,8 +27,10 @@ export default function Authentication() {
 
     //          component: sign in 카드 컴포넌트          //
     const SignInCard = () => {
+
       //         state: 비밀번호 입력 요소 참조 상태          //
       const passwordRef = useRef<HTMLInputElement | null>(null);
+
       //          state: 입력한 이메일 상태          //
       const [email, setEmail] = useState<string>('');
       //          state: 입력한 비밀번호 상태          //
@@ -67,6 +66,7 @@ export default function Authentication() {
         passwordRef.current.focus();
       }
 
+     //          event handler: 비밀번호 인풋 key down 이벤트 처리          //  
       const onPasswordKeyDownHanlder = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key !== 'Enter') return;
         onSignInButtonClickHandler();
@@ -124,6 +124,7 @@ export default function Authentication() {
 
     //          component: sign up 카드 컴포넌트          //  
     const SignUpCard = () => {
+
       //          state: 페이지 번호 상태          //
       const [page, setPage] = useState<1 | 2>(1);    
       //          state: 이메일 상태          //
@@ -188,22 +189,22 @@ export default function Authentication() {
 
       //         function: sign up response 처리 함수  // 
       const signUpResponse = ( code : string  ) =>{     
-          if(code === "VF") alert("모두 입력");
-          if(code === "DE" ) {
+          if(code === 'VF') alert("모두 입력");
+          if(code === 'DE' ) {
             setEmailError(true);
             setEmailErrorMessage("중복되는 이메일 주소입니다.");
             setPage(1);
           }
-          if(code === "DN"){
+          if(code === 'DN'){
             setNicknameError(true);
             setNicknameErrorMessage("중복되는 닉네임입니다.");
           }
-          if(code === "DT"){
+          if(code === 'DT'){
             setTelNumberError(true);
             setTelNumberErrorMessage("중복되는 전화번호입니다.");
           }
-          if(code === "DBE")  alert("데이터 베이스 오류입니다.");
-          if(code !== "SU") return;
+          if(code === 'DBE')  alert("데이터 베이스 오류입니다.");
+          if(code !== 'SU') return;
 
           setEmail("");
           setPassword("");
@@ -256,6 +257,7 @@ export default function Authentication() {
       
       //          event handler: 다음 단계 버튼 클릭 이벤트 처리          //
       const onNextStepButtonClickHandler = () => {
+
         setEmailError(false);
         setEmailErrorMessage('');
         setPasswordError(false);
@@ -335,6 +337,7 @@ export default function Authentication() {
             addressDetail,
             agreedPersonal: consent
           };
+
           signUpRequest(requestBody).then(signUpResponse);      
         }      
 

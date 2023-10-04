@@ -1,19 +1,17 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import userBoardListMock from 'mocks/user-board-list.mock';
 import { useUserStore } from 'stores';
+import { usePagination } from 'hooks';
+import {  BoardListItem } from 'types';
 
-import { BoardItem } from 'types';
-import BoardListItem from 'components/BoardListItem';
 import Pagination from 'components/Pagination';
 import { AUTH_PATH, BOARD_WRITE_PATH, MAIN_PATH, USER_PATH } from 'constant';
-import { usePagination } from 'components/hooks';
-import userMock from 'mocks/user.mock';
-import userBoardListMock from 'mocks/user-board-list.mock';
 import { getUserRequest } from 'apis';
 import { GetUserReponseDto } from 'apis/dto/response/user';
 import ResponseDto from 'apis/dto/response';
+import BoardItem from 'components/BoardItem';
 
 //          component: 유저 페이지          //
 export default function User() {
@@ -37,7 +35,7 @@ export default function User() {
     //          state: 프로필 이미지 상태           //
     const [profileImage, setProfileImage] = useState<string | null>('');
     //          state: 닉네임 상태           //
-    const [nickname, setNickname] = useState<string>('나는주코야키');
+    const [nickname, setNickname] = useState<string>('나는룬아니엘');
     //          state: 닉네임 변경 상태           //
     const [showChangeNickname, setShowChangeNickname] = useState<boolean>(false);
 
@@ -130,7 +128,7 @@ export default function User() {
 
     //          state: 페이지네이션 관련 상태          //
     const { currentPageNumber, setCurrentPageNumber, currentSectionNumber, setCurrentSectionNumber,
-    viewBoardList, viewPageNumberList, totalSection, setBoardList } = usePagination<BoardItem>(5);
+    viewBoardList, viewPageNumberList, totalSection, setBoardList } = usePagination<BoardListItem>(5);
     //          state: 게시물 개수 상태          //
     const [count, setCount] = useState<number>(0);
 
@@ -145,8 +143,6 @@ export default function User() {
       if (isMyPage) navigator(BOARD_WRITE_PATH);
       else navigator(USER_PATH(user.email));
     }
-
-    
 
     //          effect: 조회하는 유저의 이메일이 변경될 때 마다 실행할 함수 //
     useEffect(() => {
@@ -166,7 +162,7 @@ export default function User() {
             <div className='user-board-contents-nothing'>{'게시물이 없습니다.'}</div>
             ) : (
             <div className='user-board-contents-result-box'>
-              {viewBoardList.map(boardItem => <BoardListItem boardItem={boardItem} />)}
+              {viewBoardList.map(boardItem => <BoardItem boardItem={boardItem} />)}
             </div>
             )}
             <div className='user-board-button-box' onClick={onButtonClickHandler}>

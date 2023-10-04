@@ -1,17 +1,17 @@
 import './style.css';
-import { CommentItem } from 'types';
+import { CommentlistItem } from 'types';
 import DefaultProfileImage from 'assets/default-profile-image.png'
 
  
 interface Props {
-  commentItem: CommentItem;
+  commentItem: CommentlistItem;
 }
 
 //          component: 댓글 리스트 아이템 컴포넌트          //
-export default function CommentListItem({ commentItem }: Props) {
+export default function CommentItem({ commentItem }: Props) {
 
   //          state: Properties          //
-  const { contents, writeDatetime, nickname, profileImageUrl } = commentItem;
+  const { content, writeDatetime, nickname, profileImageUrl } = commentItem;
 
   //          render: 댓글 리스트 아이템 컴포넌트 렌더링          //
   return (
@@ -25,7 +25,7 @@ export default function CommentListItem({ commentItem }: Props) {
         <div className="comment-list-item-time">{writeDatetime}</div>
       </div>
       <div className='comment-list-item-main'>
-        <div className='comment-list-item-contents'>{contents}</div>
+        <div className='comment-list-item-contents'>{content}</div>
       </div>    
     </div>
   )

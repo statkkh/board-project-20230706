@@ -1,5 +1,9 @@
-import PostBoardResponseDto from "./post-board.reponse.dto";
+import PostBoardResponseDto from "./post-board.response.dto";
+import GetLatestBoardListResponseDto from "./get-latest-board-list-response.dto";
+import GetBoardResponseDto from "./get-board-response.dto";
 
 export type{
-    PostBoardResponseDto
+    GetBoardResponseDto,
+    PostBoardResponseDto,
+    GetLatestBoardListResponseDto    
 }

@@ -4,7 +4,6 @@ import { useBoardStore } from 'stores';
 
 export default function BoardWrite() {
 
-
     //          state: 이미지 인풋 ref 상태          //
     const imageInputRef = useRef<HTMLInputElement | null>(null);
     //          state: 본문 텍스트 영역 ref 상태          //
@@ -16,7 +15,6 @@ export default function BoardWrite() {
     //          state: 게시물 이미지 URL 상태          //
     const [imageUrls, setImageUrls] = useState<string[]>([]);
   
-    
     //          event handler: 제목 변경 이벤트 처리          //
     const onTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
       const title = event.target.value;

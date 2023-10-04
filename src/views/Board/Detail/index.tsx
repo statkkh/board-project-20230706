@@ -1,17 +1,20 @@
 import  { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { useUserStore } from 'stores';
-import { Board, CommentItem } from 'types';
+
+import { Board , CommentListItem, FavoriteListItem} from 'types';
 import { boardMock, commentListMock } from 'mocks';
 import { useNavigate, useParams } from 'react-router-dom';
 import DefaultProfileImage from 'assets/default-profile-image.png';
 import { BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from 'constant';
 import Pagination from 'components/Pagination';
-import CommentListItem from 'components/CommentListItem';
-import FavoriteItem from 'types/favorite-item.interface';
-import { usePagination } from 'components/hooks';
-import favoriteListMock from 'mocks/favorite-list.mock';
-
+import FavoriteItem from 'types/favorite-list-item.interface';
+import { usePagination } from 'hooks';
+import favoriteListMock from 'mocks/favorite-list-item.mock';
+import CommentItem from 'components/CommentItem';
+import { getBoardRequest } from 'apis';
+import { GetBoardResponseDto } from 'apis/dto/response/board';
+import ResponseDto from 'apis/dto/response';
 //          component: 게시물 상세보기 페이지          //
 export default function BoardDetail() {
   
@@ -30,6 +33,24 @@ export default function BoardDetail() {
     const [showMore, setShowMore] = useState<boolean>(false);
     //          state: 게시물 상태          //
     const [board, setBoard] = useState<Board | null>(null);
+
+    //          function : get boar response 처리  함수         //
+    const getBoardResponse = (responseBody : GetBoardResponseDto | ResponseDto) =>{
+      const {code} = responseBody;
+      if(code === 'NB') alert("존재하지 않는 게시물입니다.");
+      if(code === 'DBE') alert("데이터베이스 오류입니다.");
+      if(code !== 'SU'){
+        navigator(MAIN_PATH);
+        return;
+      }
+
+      const board: Board = {...responseBody as GetBoardResponseDto};
+      setBoard(board);
+
+      if (!user) return;
+      const isWriter = user.email === board.writerEmail;
+      setWriter(isWriter);
+    };
 
     //          event handler: 작성자 클릭 이벤트 처리          //
     const onNicknameClickHandler = () => {
@@ -55,10 +76,12 @@ export default function BoardDetail() {
 
     //          effect: 게시물 번호 path variable이 바뀔때 마다 게시물 불러오기          //
     useEffect(() => {
-      setBoard(boardMock);
-      if (!user) return;
-      const isWriter = user.email === boardMock.writerEmail;
-      setWriter(isWriter);
+      if( !boardNumber) {
+        alert('잘못된 접근입니다.');
+        navigator(MAIN_PATH);
+        return;
+      }
+      getBoardRequest(boardNumber).then(getBoardResponse);
      }, [boardNumber]);
    
     return(
@@ -68,7 +91,7 @@ export default function BoardDetail() {
           <div className='board-detail-sub-box'>
             <div className="board-detail-write-info-box">
               <div className= 'board-detail-writer-profile-image' style={{ backgroundImage: `url(${DefaultProfileImage})` }}></div>
-              <div className= 'board-detail-writer-nickname' onClick={onNicknameClickHandler} >{board?.nickname}</div>
+              <div className= 'board-detail-writer-nickname' onClick={onNicknameClickHandler} >{board?.writerNickname}</div>
               <div className="board-detail-info-divider">{'\|'}</div>
               <div className="board-detail-write-date">{board?.writeDatetime}</div>
             </div>
@@ -88,8 +111,8 @@ export default function BoardDetail() {
         </div>  
         <div className='divider'></div>
         <div className='board-detail-top-main'>
-          <div className='board-detail-main-text'>{board?.contents}</div>
-          { board?.imageUrls.map(imageUrl => <img className='board-detail-main-image' src={imageUrl} />) }
+          <div className='board-detail-main-text'>{board?.content}</div>
+          { board?.boardImageList.map(imageUrl => <img className='board-detail-main-image' src={imageUrl} />) }
         </div>
       </div>
     )
@@ -101,21 +124,19 @@ export default function BoardDetail() {
 
     //          state: 댓글 textarea 참조 상태          //
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-    //          state: 좋아요 리스트 상태          //
+    //          state: 좋아요 리스트 상태               //
     const [favoriteList, setFavoriteList] = useState<FavoriteItem[]>([]);
-    //          state: 댓글 리스트 페이지네이션 상태          //
-    const {currentPageNumber, setCurrentPageNumber, currentSectionNumber, setCurrentSectionNumber, viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination<CommentItem>(3);
+    //          state: 댓글 리스트 페이지네이션 상태    //
+    const {currentPageNumber, setCurrentPageNumber, currentSectionNumber, setCurrentSectionNumber, viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination<CommentListItem>(3);
     //          state: 댓글 갯수 상태          //
     const [commentsCount, setCommentsCount] = useState<number>(0);
-
-    //          state: 좋아요 박스 상태          //
+    //          state: 좋아요 박스 상태       //
     const [showFavorite, setShowFavorite] = useState<boolean>(false);
-    //          state: 댓글 박스 상태          //
+    //          state: 댓글 박스 상태         //
     const [showComments, setShowComments] = useState<boolean>(false);
-    //          state: 좋아요 상태          //
+    //          state: 좋아요 상태            //
     const [isFavorite, setFavorite] = useState<boolean>(false);
-    //          state: 댓글 상태          //
+    //          state: 댓글 상태              //
     const [comment, setComment] = useState<string>('');
 
     //           event handler: 좋아요 박스 보기 버튼 클릭 이벤트 처리          //
@@ -196,7 +217,7 @@ export default function BoardDetail() {
             <div className='board-detail-bottom-comments-list-container'>
               <div className='board-detail-bottom-comments-list-title'>{'댓글 '}<span className='emphasis'>{commentsCount}</span></div>
               <div className='board-detail-bottom-comments-list-contents'>
-                {viewBoardList.map(commentItem => <CommentListItem commentItem={commentItem} />)}
+                {viewBoardList.map(commentItem => <CommentItem commentItem={commentItem} />)}
               </div>
             </div>
           </div>

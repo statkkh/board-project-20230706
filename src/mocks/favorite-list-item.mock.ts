@@ -1,4 +1,4 @@
-import FavoriteItem from "types/favorite-item.interface";
+import FavoriteItem from "types/favorite-list-item.interface";
 
 
 const favoriteListMock: FavoriteItem[] = [
