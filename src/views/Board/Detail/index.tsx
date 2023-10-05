@@ -83,7 +83,8 @@ export default function BoardDetail() {
       }
       getBoardRequest(boardNumber).then(getBoardResponse);
      }, [boardNumber]);
-   
+     
+    //          render: 게시물 상세보기 하단 컴포넌트 렌더링          //
     return(
       <div id='board-detail-top'>
         <div className='board-detail-top-header'>

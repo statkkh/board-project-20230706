@@ -4,7 +4,7 @@ import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
 import { PostBoardRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto} from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto} from "./dto/response/board";
 import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 
 // description : Domain URL //
@@ -54,6 +54,8 @@ export const signInRequest = async (requestBody : SignInRequestDto) =>{
 
 // description : get board API end Point //
 const GET_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
+// description : get   favorite end Point //
+const GET_FAVORITE_LIST_URL = (boardNumber : string | number ) => `${API_DOMAIN}/${boardNumber}/favorite-list`;
 // description : get latest board list API end point // 
 const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`;
 // description :  post board API end Point //
@@ -74,6 +76,20 @@ export const getBoardRequest = async(boardNumber : string | number)=>{
         return result;          
 }
 
+// description :  get favorite list request //
+export const getFavoriteListRequest = async(boardNumber : string | number) =>{
+    const result = await axios.get(GET_FAVORITE_LIST_URL(boardNumber))
+        .then(response =>{
+            const responseBody : GetFavoriteListResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.response.data;
+            return responseBody;
+        })
+        return result;
+}
+
 // description : get latest board list requets  
 export const getLatestBoardListRequest= async()=>{
     const result = await axios.get(GET_LATEST_BOARD_LIST_URL())
@@ -83,8 +99,7 @@ export const getLatestBoardListRequest= async()=>{
         })
         .catch(error =>{
             const responseBody : ResponseDto = error.response.data;
-            const {code} = responseBody;
-            return code;
+            return responseBody;
         });
 
     return result;    
@@ -100,8 +115,7 @@ export const postBoardRequest = async (requestBody : PostBoardRequestDto, token 
         })
         .catch(error =>{
             const responseBody : ResponseDto = error.response.data;
-            const {code} = responseBody;
-            return code;
+            return responseBody;
         });
     return result;        
 }
