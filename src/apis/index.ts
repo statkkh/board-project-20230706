@@ -70,8 +70,7 @@ export const getBoardRequest = async(boardNumber : string | number)=>{
         })
         .catch(error =>{
             const responseBody : ResponseDto = error.response.data;
-            const {code} = responseBody;
-            return code;
+            return responseBody;
         });
         return result;          
 }

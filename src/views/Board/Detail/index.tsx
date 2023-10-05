@@ -1,20 +1,19 @@
 import  { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
-import { useUserStore } from 'stores';
-
+import DefaultProfileImage from 'assets/default-profile-image.png';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Board , CommentListItem, FavoriteListItem} from 'types';
 import { boardMock, commentListMock } from 'mocks';
-import { useNavigate, useParams } from 'react-router-dom';
-import DefaultProfileImage from 'assets/default-profile-image.png';
-import { BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from 'constant';
-import Pagination from 'components/Pagination';
-import FavoriteItem from 'types/favorite-list-item.interface';
+import { useUserStore } from 'stores';
 import { usePagination } from 'hooks';
-import favoriteListMock from 'mocks/favorite-list-item.mock';
 import CommentItem from 'components/CommentItem';
-import { getBoardRequest } from 'apis';
-import { GetBoardResponseDto } from 'apis/dto/response/board';
+import Pagination from 'components/Pagination';
+import { BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from 'constant';
+import { getBoardRequest, getFavoriteListRequest } from 'apis';
+import FavoriteItem from 'types/favorite-list-item.interface';
+import { GetBoardResponseDto, GetFavoriteListResponseDto } from 'apis/dto/response/board';
 import ResponseDto from 'apis/dto/response';
+
 //          component: 게시물 상세보기 페이지          //
 export default function BoardDetail() {
   
@@ -22,6 +21,7 @@ export default function BoardDetail() {
   const { boardNumber } = useParams();  
   //          state: 로그인 유저 상태          //
   const { user } = useUserStore();
+
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
     
@@ -34,7 +34,7 @@ export default function BoardDetail() {
     //          state: 게시물 상태          //
     const [board, setBoard] = useState<Board | null>(null);
 
-    //          function : get boar response 처리  함수         //
+    //          function : get board response 처리  함수         //
     const getBoardResponse = (responseBody : GetBoardResponseDto | ResponseDto) =>{
       const {code} = responseBody;
       if(code === 'NB') alert("존재하지 않는 게시물입니다.");
@@ -140,6 +140,20 @@ export default function BoardDetail() {
     //          state: 댓글 상태              //
     const [comment, setComment] = useState<string>('');
 
+    // function : get favorite list Response //
+    const getFavoriteListResponse = (responseBody :GetFavoriteListResponseDto | ResponseDto ) => {
+      const {code} = responseBody;
+      if(code ==='NB') alert("존재하지 않는 게시물입니다.");
+      if(code ==='DBE') alert('data base error ');
+      if(code !== 'SU'){
+        navigator(MAIN_PATH);
+        return;
+      }
+
+      const { favoriteList } = responseBody as GetFavoriteListResponseDto;
+      setFavoriteList(favoriteList);
+    };
+
     //           event handler: 좋아요 박스 보기 버튼 클릭 이벤트 처리          //
     const onShowFavoriteButtonClickHandler = () => {
       setShowFavorite(!showFavorite);
@@ -169,9 +183,17 @@ export default function BoardDetail() {
 
     //          effect: 게시물 번호 path variable이 바뀔때 마다 좋아요 및 댓글 리스트 불러오기          //
     useEffect(() => {
-      setFavoriteList(favoriteListMock);
+      if(!boardNumber){
+        alert('잘못된 접근');
+        navigator(MAIN_PATH);
+        return;
+      }
+
+      getFavoriteListRequest(boardNumber).then(getFavoriteListResponse);
+
       setBoardList(commentListMock);
       setCommentsCount(commentListMock.length);
+
     }, [boardNumber]);
 
     //          render: 게시물 상세보기 하단 컴포넌트 렌더링          //
