@@ -18,7 +18,8 @@ export default function CommentItem({ commentItem }: Props) {
     const now = dayjs();
     const writeTime = dayjs(writeDatetime);
     
-    const gap = writeTime.diff(now);
+    const gap = now.diff(writeTime, 's');
+
     console.log(gap);
     if(gap < 60) return `${gap}초 전`;
     if(gap < 3600) return `${ Math.floor(gap/60)}분 전`;

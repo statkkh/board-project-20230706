@@ -331,9 +331,9 @@ export default function BoardDetail() {
           {user !== null && (
           <div className='board-detail-bottom-comments-input-box'>
             <div className='board-detail-bottom-comments-input-container'>
-              <textarea ref={textareaRef} className='board-detail-bottom-comments-input' placeholder='댓글을 작성해주세요.' value={comment} onClick={onCommentButtonClickHandler} onChange={onCommentChangeHandler} />
+              <textarea ref={textareaRef} className='board-detail-bottom-comments-input' placeholder='댓글을 작성해주세요.' value={comment} onChange={onCommentChangeHandler} />
               <div className='board-detail-bottom-comments-button-box'>
-                {comment.length === 0 ? (<div className='board-detail-bottom-comments-button-disable'>{'댓글달기'}</div>) : (<div className='board-detail-bottom-comments-button'>{'댓글달기'}</div>)}
+                {comment.length === 0 ? (<div className='board-detail-bottom-comments-button-disable'>{'댓글달기'}</div>) : (<div className='board-detail-bottom-comments-button' onClick={onCommentButtonClickHandler} >{'댓글달기'}</div>)}
               </div>
             </div>
           </div>
