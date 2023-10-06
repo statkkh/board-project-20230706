@@ -151,13 +151,13 @@ export default function Header() {
         }
         if(code === 'NB') {
           alert('존재하지 않는 게시물입니다.');
-          navigator(AUTH_PATH);
+          navigator(MAIN_PATH);
           return;          
         }
 
         if(code === 'PB'){ 
           alert('권한이 없습니다.');
-          navigator(AUTH_PATH);
+          navigator(MAIN_PATH);
           return;
         }
 
@@ -190,7 +190,6 @@ export default function Header() {
           title, content :  contents, boardImageList
         }
         postBoardRequest(requestBody, accessToken).then(postBoardResponse);
-       
       }
       if (isBoardUpdatePage) {
         if(!boardNumber) return;
