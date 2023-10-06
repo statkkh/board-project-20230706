@@ -23,7 +23,7 @@ export default function CommentItem({ commentItem }: Props) {
     console.log(gap);
     if(gap < 60) return `${gap}초 전`;
     if(gap < 3600) return `${ Math.floor(gap/60)}분 전`;
-    if(gap < 864000) return `${ Math.floor(gap/3600)}분 전`;
+    if(gap < 864000) return `${ Math.floor(gap/3600)}시간 전`;
     return `${ Math.floor(gap/86400)}일 전`;
   };
   

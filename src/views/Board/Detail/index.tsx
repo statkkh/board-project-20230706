@@ -38,7 +38,7 @@ export default function BoardDetail() {
     //          state: 게시물 상태          //
     const [board, setBoard] = useState<Board | null>(null);
 
-    //          function : 작성일 포멧 변경 함수 //
+    //          function : 작성일 포멧 변경 함수         //
     const getWriteDatetimeFormat = (writeDatetime :string | undefined)=>{
       if(!writeDatetime) return '';
       const date = dayjs(writeDatetime);
