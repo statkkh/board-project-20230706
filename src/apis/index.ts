@@ -3,8 +3,9 @@ import { SignInRequestDto, SignUpRequestDto } from "./dto/request/auth";
 import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
-import { PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto} from "./dto/response/board";
+import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto} from "./dto/response/board";
+import { error } from "console";
 // import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 
 // description : Domain URL //
@@ -64,6 +65,8 @@ const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`;
 const POST_BOARD_URL =() => `${API_DOMAIN}/board`;
 // description :  post comment API end Point //
 const POST_COMMENT_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}/comment`;
+// description :  patch board  API end Point //
+const PATCH_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
 
 // description :  get board request //
 export const getBoardRequest = async(boardNumber : string | number)=>{
@@ -108,8 +111,24 @@ export const getLatestBoardListRequest= async()=>{
     return result;    
 }
 
-// description : put favorite list request 
+// description : put favorite list request  //
 const PUT_FAVORITE_URL  = (boardNumber : string | number ) =>`${API_DOMAIN}/board/${boardNumber}/favorite`;
+
+// description : :PATCH_BOARD_URL // 
+export const patchBoardRequest = async(requestBody : PatchBoardRequestDto , boardNumber: string | number , token : string) =>{
+    const result = await axios.patch(PATCH_BOARD_URL(boardNumber), requestBody, authorization(token))
+        .then(response =>{
+            const responseBody: PatchBoardResponseDto = response.data;
+            const { code } = responseBody;
+            return code;
+        })
+        .catch(error =>{
+            const responseBody: ResponseDto = error.response.data;
+            const { code } = responseBody;
+            return code;            
+        })
+    return result;
+};
 
 // description :  get comment list request //
 export const getCommentListRequest = async(boardNumber : string | number) =>{
@@ -141,7 +160,7 @@ export const postBoardRequest = async (requestBody : PostBoardRequestDto, token 
     return result;        
 }
 // description :  post comment request //
-export const postCommentRequest = async(requestBody : PostCommentRequestDto , boardNumber :string, token:string)=>{
+export const postCommentRequest = async(requestBody : PostCommentRequestDto , boardNumber :string, token:string)=> {
     const result = await axios.post(POST_COMMENT_URL(boardNumber), requestBody, authorization(token))
         .then(response =>{
             const responseBody : PostCommentResponseDto = response.data;
@@ -150,14 +169,14 @@ export const postCommentRequest = async(requestBody : PostCommentRequestDto , bo
         })
         .catch(error =>{
             const responseBody : ResponseDto = error.response.data;
-            const {code} = responseBody;
+            const { code } = responseBody;
             return code;
         });
     return result;          
 }
 
 // description : put favorite request //
-export const putFavoriteRequest = async( boardNumber : string | number , token : string) =>{
+export const putFavoriteRequest = async( boardNumber : string | number , token : string) => {
     const result = await axios.put(PUT_FAVORITE_URL(boardNumber) ,{}, authorization(token) )
         .then(response =>{
             const responseBody : PutFavoriteResponseDto = response.data 
@@ -194,7 +213,7 @@ export const getSignInUserRequest = async (token : string) => {
 };
 
 // description : get user request  //
-export const getUserRequest = async(email : string ) =>{
+export const getUserRequest = async(email : string ) => {
     const result = await axios.get(GET_USER_URL(email))
         .then(response =>{
             const responseBody : GetUserReponseDto = response.data;

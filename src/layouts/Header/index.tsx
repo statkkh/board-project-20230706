@@ -5,8 +5,8 @@ import { useUserStore ,useBoardStore} from 'stores';
 import { useCookies } from 'react-cookie';
 import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, USER_PATH } from 'constant';
 import { LoginUser } from 'types';
-import { fileUploadRequest, postBoardRequest } from 'apis';
-import { PostBoardRequestDto } from 'apis/dto/request/board';
+import { fileUploadRequest, patchBoardRequest, postBoardRequest } from 'apis';
+import { PatchBoardRequestDto, PostBoardRequestDto } from 'apis/dto/request/board';
 
 //          component: 헤더 컴포넌트          //
 export default function Header() {
@@ -122,7 +122,8 @@ export default function Header() {
     };
   //          component: 업로드 버튼 컴포넌트          //
   const UploadButton = () => {
-
+    //          state: 게시물 번호 path variable 상태          //
+    const {boardNumber} = useParams();
     //          state: 게시물 제목, 내용, 이미지 전역 상태          //
     const { title, contents, images, resetBoard } = useBoardStore();
    
@@ -142,7 +143,31 @@ export default function Header() {
         // description : 마이 페이지 이동 //
         navigator(USER_PATH(email));
     }
+    // function : patch board response 처리 함수 //
+    const patchBoardResponse = (code : string) =>{
+        if(code === 'NU' || code === 'AF') {
+          navigator(AUTH_PATH);
+          return;
+        }
+        if(code === 'NB') {
+          alert('존재하지 않는 게시물입니다.');
+          navigator(AUTH_PATH);
+          return;          
+        }
 
+        if(code === 'PB'){ 
+          alert('권한이 없습니다.');
+          navigator(AUTH_PATH);
+          return;
+        }
+
+        if(code === 'VF') alert('모두 입력하세요.');
+        if(code === 'DBE') alert("데이터 베이스 오류입니다.");
+        if(code !== 'SU') return;
+        
+        if(!boardNumber) return;
+        navigator(BOARD_DETAIL_PATH(boardNumber));
+    }
     //          event handler: 업로드 버튼 클릭 이벤트 처리          //
     const onUploadButtonClickHandler = async () => {
 
@@ -168,8 +193,11 @@ export default function Header() {
        
       }
       if (isBoardUpdatePage) {
-        alert('수정');
-        resetBoard();
+        if(!boardNumber) return;
+        const  requestBody : PatchBoardRequestDto = {
+          title, content : contents, boardImageList
+        } 
+        patchBoardRequest(requestBody,boardNumber, accessToken).then(patchBoardResponse);
       }
     }
     

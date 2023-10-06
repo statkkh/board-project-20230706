@@ -1,9 +1,13 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { useBoardStore } from 'stores';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { boardMock } from 'mocks';
 import { convertUrlsToFiles } from 'utils';
+import { getBoardRequest } from 'apis';
+import { GetBoardResponseDto } from 'apis/dto/response/board';
+import ResponseDto from 'apis/dto/response';
+import { MAIN_PATH } from 'constant';
 
 //          component: 게시물 수정 화면          //
 export default function BoardUpdate() {
@@ -21,6 +25,25 @@ export default function BoardUpdate() {
   //          state: 게시물 이미지 URL 상태          //
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
+  //          function: 네비게이트 함수           //
+  const navigator = useNavigate();
+
+  //        function : get board response         //
+  const getBoardResponse = (responseBody : GetBoardResponseDto | ResponseDto) =>{
+    const { code } = responseBody;
+    if(code === 'NB')  alert("존재하지 않는 게시물입니다.");
+    if(code === 'DBE') alert("데이터베이스 오류입니다.");
+    if(code !== 'SU'){
+      navigator(MAIN_PATH);
+      return;
+    }
+
+    const { title, content, boardImageList } = responseBody as GetBoardResponseDto;
+    setTitle(title);
+    setContents(content);
+    convertUrlsToFiles(boardImageList).then(files => setImages(files));
+    setImageUrls(boardImageList);   
+  }
   //          event handler: 제목 변경 이벤트 처리          //
   const onTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const title = event.target.value;
@@ -67,11 +90,8 @@ export default function BoardUpdate() {
   //          effect: 게시물 번호 path variable이 변경될 때마다 실행될 함수          //
   useEffect(() => {
     if (!boardNumber) return;
-    const { title, content, boardImageList  } = boardMock;
-    setTitle(title);
-    setContents(content);
-    convertUrlsToFiles(boardImageList).then(files => setImages(files));
-    setImageUrls(boardImageList);
+    getBoardRequest(boardNumber).then(getBoardResponse);
+
   }, [boardNumber]);
 
   //          render: 게시물 수정 화면 렌더링          //
