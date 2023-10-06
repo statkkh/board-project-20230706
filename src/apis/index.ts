@@ -5,7 +5,7 @@ import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
 import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto} from "./dto/response/board";
-import { error } from "console";
+
 // import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 
 // description : Domain URL //
@@ -160,7 +160,8 @@ export const postBoardRequest = async (requestBody : PostBoardRequestDto, token 
     return result;        
 }
 // description :  post comment request //
-export const postCommentRequest = async(requestBody : PostCommentRequestDto , boardNumber :string, token:string)=> {
+export const postCommentRequest = async(requestBody : PostCommentRequestDto , boardNumber:string, token:string)=> {
+
     const result = await axios.post(POST_COMMENT_URL(boardNumber), requestBody, authorization(token))
         .then(response =>{
             const responseBody : PostCommentResponseDto = response.data;

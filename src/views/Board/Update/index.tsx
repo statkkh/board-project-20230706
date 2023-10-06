@@ -28,7 +28,7 @@ export default function BoardUpdate() {
   //          function: 네비게이트 함수           //
   const navigator = useNavigate();
 
-  //        function : get board response         //
+  //        function : get board response   처리 함수         //
   const getBoardResponse = (responseBody : GetBoardResponseDto | ResponseDto) =>{
     const { code } = responseBody;
     if(code === 'NB')  alert("존재하지 않는 게시물입니다.");
@@ -70,7 +70,6 @@ export default function BoardUpdate() {
     setImageUrls(newImageUrls);
     setImages(newImages);
   }
-
   //          event handler: 이미지 업로드 버튼 클릭 이벤트 처리          //
   const onImageUploadButtonClickHandler = () => {
     if (!imageInputRef.current) return;

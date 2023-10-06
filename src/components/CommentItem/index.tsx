@@ -13,14 +13,12 @@ export default function CommentItem({ commentItem }: Props) {
   //          state: Properties          //
   const { content, writeDatetime, nickname, profileImageUrl } = commentItem;
 
-  // function : 작성일 경과 시간 함수           //
+  //      function : 작성일 경과 시간 함수           //
   const getElapsedTime = () =>{
-    const now = dayjs();
+    const now = dayjs().add(9, 'hour');
     const writeTime = dayjs(writeDatetime);
     
     const gap = now.diff(writeTime, 's');
-
-    console.log(gap);
     if(gap < 60) return `${gap}초 전`;
     if(gap < 3600) return `${ Math.floor(gap/60)}분 전`;
     if(gap < 864000) return `${ Math.floor(gap/3600)}시간 전`;

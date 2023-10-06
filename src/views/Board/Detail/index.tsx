@@ -127,7 +127,6 @@ export default function BoardDetail() {
         </div>
       </div>
     )
-
   };  
   
   //          component: 게시물 상세보기 하단 컴포넌트          //
@@ -155,10 +154,7 @@ export default function BoardDetail() {
       const {code} = responseBody;
       if(code ==='NB') alert("존재하지 않는 게시물입니다.");
       if(code ==='DBE') alert('data base error ');
-      if(code !== 'SU'){
-        navigator(MAIN_PATH);
-        return;
-      }
+      if(code !== 'SU') return;  
 
       const { favoriteList } = responseBody as GetFavoriteListResponseDto;
       setFavoriteList(favoriteList);
@@ -171,10 +167,7 @@ export default function BoardDetail() {
       const {code} = responseBody;
       if(code === 'NB') alert('존재하지 않는 게시물입니다');
       if(code === 'DBE') alert('데이터 베이스 오류입니다.');
-      if(code !== 'SU'){
-        navigator(MAIN_PATH);
-        return;
-      }    
+      if(code !== 'SU') return;      
       
       const {commentList } = responseBody as GetCommentListResponseDto;
       setBoardList(commentList);
@@ -201,12 +194,9 @@ export default function BoardDetail() {
       if(code ==='NU') alert('존재하지 않는 유저입니다.');
       if(code ==='AF') alert('인증에 실패했습니다.');
       if(code === 'DBE') alert('데이터 베이스 오류입니다.');      
-      if(code !== 'SU'){
-        navigator(MAIN_PATH);
-        return;
-      }
-      setComment('');
-      
+      if(code !== 'SU') return;  
+
+      setComment('');      
       if(!boardNumber) return;        
       getCommentListRequest(boardNumber).then(getCommentListResponse);
     }
