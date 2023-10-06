@@ -4,8 +4,8 @@ import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
 import { PostBoardRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto} from "./dto/response/board";
-import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto} from "./dto/response/board";
+// import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 
 // description : Domain URL //
 const DOMAIN = "http://localhost:4000";
@@ -55,7 +55,10 @@ export const signInRequest = async (requestBody : SignInRequestDto) =>{
 // description : get board API end Point //
 const GET_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
 // description : get   favorite end Point //
-const GET_FAVORITE_LIST_URL = (boardNumber : string | number ) => `${API_DOMAIN}/${boardNumber}/favorite-list`;
+const GET_FAVORITE_LIST_URL = (boardNumber : string | number ) => `${API_DOMAIN}/board/${boardNumber}/favorite-list`;
+// description : get comment list API end Point //
+const GET_COMMENT_LIST_URL = (boardNumber : string | number ) => `${API_DOMAIN}/board/${boardNumber}/comment-list`;
+
 // description : get latest board list API end point // 
 const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`;
 // description :  post board API end Point //
@@ -104,6 +107,23 @@ export const getLatestBoardListRequest= async()=>{
     return result;    
 }
 
+// description : put favorite list request 
+const PUT_FAVORITE_URL  = (boardNumber : string | number ) =>`${API_DOMAIN}/board/${boardNumber}/favorite`;
+
+// description :  get comment list request //
+export const getCommentListRequest = async(boardNumber : string | number) =>{
+    const result = await axios.get(GET_COMMENT_LIST_URL(boardNumber))
+        .then(response =>{
+            const responseBody : GetCommentListResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;      
+};
+
 // description :  post board request //
 export const postBoardRequest = async (requestBody : PostBoardRequestDto, token : string) => {
     const result = await axios.post(POST_BOARD_URL(), requestBody, authorization(token))
@@ -114,13 +134,32 @@ export const postBoardRequest = async (requestBody : PostBoardRequestDto, token 
         })
         .catch(error =>{
             const responseBody : ResponseDto = error.response.data;
-            return responseBody;
+            const  { code } = responseBody;
+            return code;
         });
     return result;        
 }
 
+// description : put favorite request //
+export const putFavoriteRequest = async( boardNumber : string | number , token : string) =>{
+    const result = await axios.put(PUT_FAVORITE_URL(boardNumber) ,{}, authorization(token) )
+        .then(response =>{
+            const responseBody : PutFavoriteResponseDto = response.data 
+            const  { code } = responseBody;
+            return code;
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.response.data;
+            const  { code } = responseBody;
+            return code;
+        });
+ 
+    return result; 
+}
+
 // description : get sign in use API end Point Request //
 const GET_SIGN_IN_USER_URL = () => `${API_DOMAIN}/user`;
+
 // description: get user API end point //
 const GET_USER_URL = (email : string) => `${API_DOMAIN}/user/${email}`;
 
@@ -162,18 +201,16 @@ const FILE_UPLOAD_URL = () => `${FILE_DOMAIN}/upload`;
 // description :  file content type Header //
 const multipart =  {headers : {'Content-Type' : 'multipart/form-data'} };
 
-// description :  file upload request //
-export const fileUploadRequest = async (data : FormData) =>{
-    
-    const result = await axios.post(FILE_UPLOAD_URL(), data , multipart)
+// description: file upload request //
+export const fileUploadRequest = async (data: FormData) => {
+    const result = await axios.post(FILE_UPLOAD_URL(), data, multipart)
         .then(response => {
-            const responseBody : string  = response.data;
+            const responseBody: string = response.data;
             return responseBody;
         })
-        .catch(error =>{
+        .catch(error => {
             return null;
-        }); 
-
+        });
     return result;
-}   
+} 
  

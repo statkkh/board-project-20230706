@@ -12,12 +12,12 @@ interface Props {
 }
 
 //          component: 게시물 리스트 아이템 컴포넌트          //
-export default function BoardListItem({ boardItem }: Props) {
+export default function BoardItem({ boardItem }: Props) {
 
   //          state: Properties          //
   const { boardNumber, title, content, boardTitleImage } = boardItem;
   const { viewCount, commentCount, favoriteCount } = boardItem;
-  const { writeDatetime, writerNickname, writerProfileImageUrl } = boardItem;
+  const { writeDatetime, writerNickname, writerProfileImage } = boardItem;
 
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
@@ -35,7 +35,7 @@ export default function BoardListItem({ boardItem }: Props) {
       <div className='board-list-item-main-box'>
         <div className='board-list-item-top'>
           <div className='board-list-item-profile-box'>
-            <div className='board-list-item-profile-image' style={{ backgroundImage: `url(${writerProfileImageUrl ?  <div className='board-list-item-profile-image' style={{ backgroundImage: `url(${writerProfileImageUrl ? writerProfileImageUrl : DefaultProfileImage})` }}></div>
+            <div className='board-list-item-profile-image' style={{ backgroundImage: `url(${writerProfileImage ?  <div className='board-list-item-profile-image' style={{ backgroundImage: `url(${writerProfileImage ? writerProfileImage : DefaultProfileImage})` }}></div>
  : DefaultProfileImage})` }}></div>
           </div>
           <div className='board-list-item-write-box'>

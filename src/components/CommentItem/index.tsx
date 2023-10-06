@@ -1,10 +1,10 @@
 import './style.css';
-import { CommentlistItem } from 'types';
+import { CommentListItem } from 'types';
 import DefaultProfileImage from 'assets/default-profile-image.png'
 
  
 interface Props {
-  commentItem: CommentlistItem;
+  commentItem: CommentListItem;
 }
 
 //          component: 댓글 리스트 아이템 컴포넌트          //

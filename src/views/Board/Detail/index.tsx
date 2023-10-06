@@ -9,10 +9,11 @@ import { usePagination } from 'hooks';
 import CommentItem from 'components/CommentItem';
 import Pagination from 'components/Pagination';
 import { BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from 'constant';
-import { getBoardRequest, getFavoriteListRequest } from 'apis';
+import { getBoardRequest, getCommentListRequest, getFavoriteListRequest, putFavoriteRequest } from 'apis';
 import FavoriteItem from 'types/favorite-list-item.interface';
-import { GetBoardResponseDto, GetFavoriteListResponseDto } from 'apis/dto/response/board';
+import { GetBoardResponseDto, GetCommentListResponseDto, GetFavoriteListResponseDto } from 'apis/dto/response/board';
 import ResponseDto from 'apis/dto/response';
+import { useCookies } from 'react-cookie';
 
 //          component: 게시물 상세보기 페이지          //
 export default function BoardDetail() {
@@ -21,7 +22,8 @@ export default function BoardDetail() {
   const { boardNumber } = useParams();  
   //          state: 로그인 유저 상태          //
   const { user } = useUserStore();
-
+  //          state: cookies 상태          //
+  const [cookies , setCookies] = useCookies();
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
     
@@ -72,7 +74,7 @@ export default function BoardDetail() {
       alert(`${boardNumber} 게시물 삭제!`);
       navigator(MAIN_PATH);
     };
-
+    
 
     //          effect: 게시물 번호 path variable이 바뀔때 마다 게시물 불러오기          //
     useEffect(() => {
@@ -140,6 +142,7 @@ export default function BoardDetail() {
     //          state: 댓글 상태              //
     const [comment, setComment] = useState<string>('');
 
+
     // function : get favorite list Response //
     const getFavoriteListResponse = (responseBody :GetFavoriteListResponseDto | ResponseDto ) => {
       const {code} = responseBody;
@@ -152,7 +155,39 @@ export default function BoardDetail() {
 
       const { favoriteList } = responseBody as GetFavoriteListResponseDto;
       setFavoriteList(favoriteList);
+
+      const isFavorite = favoriteList.findIndex(item => item.email === user?.email) !== -1;
+      setFavorite(isFavorite);
     };
+    // function : get Comment List Response //
+    const getCommentListResponse = (responseBody : GetCommentListResponseDto | ResponseDto) =>{
+      const {code} = responseBody;
+      if(code === 'NB') alert('존재하지 않는 게시물입니다');
+      if(code === 'DBE') alert('데이터 베이스 오류입니다.');
+      if(code !== 'SU'){
+        navigator(MAIN_PATH);
+        return;
+      }    
+      
+      const {commentList } = responseBody as GetCommentListResponseDto;
+      setBoardList(commentList);
+      setCommentsCount(commentList.length);
+    }
+    // function : putFavoriteResponse //
+    const putFavoriteResponse = (code :string) =>{
+      if(code === 'VF') alert('잘못된 접근입니다.');
+      if(code === 'NU') alert('존재하지 않는 유저입니다.');
+      if(code === 'NB') alert('존재하지 않는 게시물입니다.');
+      if(code === 'AF') alert('인증에 대한 실패입니다.');
+      if(code === 'DBE') alert('데이터 베이스 오류입니다.');
+      if(code !== 'SU'){
+        navigator(MAIN_PATH);
+        return;
+      }
+      if(!boardNumber) return;
+      getFavoriteListRequest(boardNumber).then(getFavoriteListResponse);
+
+    }
 
     //           event handler: 좋아요 박스 보기 버튼 클릭 이벤트 처리          //
     const onShowFavoriteButtonClickHandler = () => {
@@ -164,12 +199,16 @@ export default function BoardDetail() {
     }
     //           event handler: 좋아요 버튼 클릭 이벤트 처리          //
     const onFavoriteButtonClickHandler = () => {
-      if (!user) {
+      const accessToken = cookies.accessToken;
+      if (!accessToken) {
         alert('로그인시 이용가능합니다.');
         return;
       }
-      // TODO: API 연결로 변경
-      setFavorite(!isFavorite);
+ 
+      if(!boardNumber) return;
+
+      putFavoriteRequest(boardNumber,accessToken).then(putFavoriteResponse);
+
     }
     //           event handler: 댓글 변경 이벤트 처리          //
     const onCommentChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -188,12 +227,8 @@ export default function BoardDetail() {
         navigator(MAIN_PATH);
         return;
       }
-
       getFavoriteListRequest(boardNumber).then(getFavoriteListResponse);
-
-      setBoardList(commentListMock);
-      setCommentsCount(commentListMock.length);
-
+      getCommentListRequest(boardNumber).then(getCommentListResponse);
     }, [boardNumber]);
 
     //          render: 게시물 상세보기 하단 컴포넌트 렌더링          //

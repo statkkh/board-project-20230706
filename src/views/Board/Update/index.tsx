@@ -67,11 +67,11 @@ export default function BoardUpdate() {
   //          effect: 게시물 번호 path variable이 변경될 때마다 실행될 함수          //
   useEffect(() => {
     if (!boardNumber) return;
-    const { title, contents, imageUrls } = boardMock;
+    const { title, content, boardImageList  } = boardMock;
     setTitle(title);
-    setContents(contents);
-    convertUrlsToFiles(imageUrls).then(files => setImages(files));
-    setImageUrls(imageUrls);
+    setContents(content);
+    convertUrlsToFiles(boardImageList).then(files => setImages(files));
+    setImageUrls(boardImageList);
   }, [boardNumber]);
 
   //          render: 게시물 수정 화면 렌더링          //

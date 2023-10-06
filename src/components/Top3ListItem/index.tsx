@@ -16,7 +16,7 @@ export default function Top3ListItem({ boardItem }: Props) {
   //          state: Properties         //
   const { boardNumber, title, content, boardTitleImage } = boardItem;
   const { viewCount, commentCount, favoriteCount } = boardItem;
-  const { writeDatetime, writerNickname, writerProfileImageUrl } = boardItem;
+  const { writeDatetime, writerNickname, writerProfileImage } = boardItem;
   const navigator = useNavigate();
 
   //          event handler: Card Click 이벤트 처리 함수         //
@@ -32,7 +32,7 @@ export default function Top3ListItem({ boardItem }: Props) {
       <div className='top3-list-item-main-box'>
         <div className='top3-list-item-top'>
           <div className='top3-list-item-profile-box'>
-            <div className='top3-list-item-profile-image' style={{ backgroundImage: `url(${writerProfileImageUrl ? writerProfileImageUrl : DefaultProfileImage})` }}></div>
+            <div className='top3-list-item-profile-image' style={{ backgroundImage: `url(${writerProfileImage ? writerProfileImage : DefaultProfileImage})` }}></div>
           </div>
           <div className='top3-list-item-write-box'>
             <div className='top3-list-item-nickname'>{writerNickname}</div>

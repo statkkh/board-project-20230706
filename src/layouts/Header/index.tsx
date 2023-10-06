@@ -171,7 +171,6 @@ export default function Header() {
         alert('수정');
         resetBoard();
       }
-
     }
     
     //          render: 업로드 버튼 (Active) 컴포넌트 렌더링          //
