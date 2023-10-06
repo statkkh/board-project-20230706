@@ -3,8 +3,8 @@ import { SignInRequestDto, SignUpRequestDto } from "./dto/request/auth";
 import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
-import { PostBoardRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto} from "./dto/response/board";
+import { PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto} from "./dto/response/board";
 // import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
 
 // description : Domain URL //
@@ -58,11 +58,12 @@ const GET_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${
 const GET_FAVORITE_LIST_URL = (boardNumber : string | number ) => `${API_DOMAIN}/board/${boardNumber}/favorite-list`;
 // description : get comment list API end Point //
 const GET_COMMENT_LIST_URL = (boardNumber : string | number ) => `${API_DOMAIN}/board/${boardNumber}/comment-list`;
-
 // description : get latest board list API end point // 
 const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`;
 // description :  post board API end Point //
 const POST_BOARD_URL =() => `${API_DOMAIN}/board`;
+// description :  post comment API end Point //
+const POST_COMMENT_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}/comment`;
 
 // description :  get board request //
 export const getBoardRequest = async(boardNumber : string | number)=>{
@@ -138,6 +139,21 @@ export const postBoardRequest = async (requestBody : PostBoardRequestDto, token 
             return code;
         });
     return result;        
+}
+// description :  post comment request //
+export const postCommentRequest = async(requestBody : PostCommentRequestDto , boardNumber :string, token:string)=>{
+    const result = await axios.post(POST_COMMENT_URL(boardNumber), requestBody, authorization(token))
+        .then(response =>{
+            const responseBody : PostCommentResponseDto = response.data;
+            const { code } = responseBody;
+            return code;
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.response.data;
+            const {code} = responseBody;
+            return code;
+        });
+    return result;          
 }
 
 // description : put favorite request //

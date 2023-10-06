@@ -3,7 +3,7 @@ import './style.css';
 import DefaultProfileImage from 'assets/default-profile-image.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Board , CommentListItem, FavoriteListItem} from 'types';
-import { boardMock, commentListMock } from 'mocks';
+// import { boardMock, commentListMock } from 'mocks';
 import { useUserStore } from 'stores';
 import { usePagination } from 'hooks';
 import CommentItem from 'components/CommentItem';
