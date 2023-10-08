@@ -6,8 +6,6 @@ import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
 import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto} from "./dto/response/board";
 
-// import GetUserResponseDto from "./dto/response/user/get-user.response.dto";
-
 // description : Domain URL //
 const DOMAIN = "http://localhost:4000";
 
@@ -65,6 +63,8 @@ const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`;
 const POST_BOARD_URL =() => `${API_DOMAIN}/board`;
 // description :  post comment API end Point //
 const POST_COMMENT_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}/comment`;
+// description : put favorite list request  //
+const PUT_FAVORITE_URL  = (boardNumber : string | number ) =>`${API_DOMAIN}/board/${boardNumber}/favorite`;
 // description :  patch board  API end Point //
 const PATCH_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
 
@@ -96,8 +96,8 @@ export const getFavoriteListRequest = async(boardNumber : string | number) =>{
         return result;
 }
 
-// description : get latest board list requets  
-export const getLatestBoardListRequest= async()=>{
+// description : get latest board list request   //
+export const getLatestBoardListRequest = async()=>{
     const result = await axios.get(GET_LATEST_BOARD_LIST_URL())
         .then(response =>{   
             const responseBody : GetLatestBoardListResponseDto = response.data;
@@ -107,14 +107,11 @@ export const getLatestBoardListRequest= async()=>{
             const responseBody : ResponseDto = error.response.data;
             return responseBody;
         });
-
     return result;    
 }
 
-// description : put favorite list request  //
-const PUT_FAVORITE_URL  = (boardNumber : string | number ) =>`${API_DOMAIN}/board/${boardNumber}/favorite`;
 
-// description : :PATCH_BOARD_URL // 
+// description :patch board request// 
 export const patchBoardRequest = async(requestBody : PatchBoardRequestDto , boardNumber: string | number , token : string) =>{
     const result = await axios.patch(PATCH_BOARD_URL(boardNumber), requestBody, authorization(token))
         .then(response =>{
@@ -161,7 +158,6 @@ export const postBoardRequest = async (requestBody : PostBoardRequestDto, token 
 }
 // description :  post comment request //
 export const postCommentRequest = async(requestBody : PostCommentRequestDto , boardNumber:string, token:string)=> {
-
     const result = await axios.post(POST_COMMENT_URL(boardNumber), requestBody, authorization(token))
         .then(response =>{
             const responseBody : PostCommentResponseDto = response.data;
