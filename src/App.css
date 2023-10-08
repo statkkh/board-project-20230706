@@ -85,6 +85,79 @@
   background-size: 100% 100%;
 }
 
+.comment-light-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/comment-light-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+.down-light-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/down-light-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+.up-light-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/up-light-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+.favorite-fill-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/favorite-fill-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+.favorite-light-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/favorite-light-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+.edit-light-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/edit-light-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+
+.arrow-right-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/arrow-right-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
+.close-icon {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/close-icon.png);
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
+
 .image-box-light-icon {
   width: 100%;
   height: 100%;
