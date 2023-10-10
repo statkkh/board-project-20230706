@@ -34,7 +34,6 @@ export default function BoardDetail() {
     if(code === 'DBE') alert('데이터 베이스 오류입니다.')
     if(code === 'NB') alert('존재하지 않는 게시물입니다.')
   }
-
     
   //          component: 게시물 상세보기 상단 컴포넌트          //
   const BoardDetailTop = () => {
@@ -179,7 +178,7 @@ export default function BoardDetail() {
     const getFavoriteListResponse = (responseBody :GetFavoriteListResponseDto | ResponseDto ) => {
       const {code} = responseBody;
       if(code ==='NB') alert("존재하지 않는 게시물입니다.");
-      if(code ==='DBE') alert('data base error ');
+      if(code ==='DBE') alert('데이터베이스 오류입니다.');
       if(code !== 'SU') return;  
 
       const { favoriteList } = responseBody as GetFavoriteListResponseDto;
