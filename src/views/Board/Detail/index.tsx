@@ -206,10 +206,8 @@ export default function BoardDetail() {
       if(code === 'NB') alert('존재하지 않는 게시물입니다.');
       if(code === 'AF') alert('인증에 대한 실패입니다.');
       if(code === 'DBE') alert('데이터 베이스 오류입니다.');
-      if(code !== 'SU'){
-        navigator(MAIN_PATH);
-        return;
-      }
+      if(code !== 'SU') return;
+
       if(!boardNumber) return;
       getFavoriteListRequest(boardNumber).then(getFavoriteListResponse);
     }
@@ -242,12 +240,10 @@ export default function BoardDetail() {
       if (!accessToken) {
         alert('로그인시 이용가능합니다.');
         return;
-      }
- 
+      } 
       if(!boardNumber) return;
 
       putFavoriteRequest(boardNumber,accessToken).then(putFavoriteResponse);
-
     }
     //           event handler: 댓글 작성  버튼 클릭 이벤트 처리          //
     const onCommentButtonClickHandler = ()  =>{
@@ -256,8 +252,8 @@ export default function BoardDetail() {
         alert('로그인시 이용가능합니다.');
         return;
       }   
-
-      if(!boardNumber) return;      
+      if(!boardNumber) return;
+      
       const requestBody : PostCommentRequestDto = {
          content : comment
       };
@@ -372,7 +368,8 @@ export default function BoardDetail() {
     if(!boardNumber) return;
     increaseViewCountRequest(boardNumber).then(increaseViewCountResponse);
 
-  },[])
+  },[]);
+  //          render: 게시물 상세보기 페이지 렌더링          //
   return (
     <div  id='board-detail-wrapper'>
       <div className='board-detail-container'>
