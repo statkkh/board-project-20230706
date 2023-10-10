@@ -4,7 +4,8 @@ import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto} from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto} from "./dto/response/board";
+
 
 // description : Domain URL //
 const DOMAIN = "http://localhost:4000";
@@ -67,6 +68,8 @@ const POST_COMMENT_URL = (boardNumber : string | number) => `${API_DOMAIN}/board
 const PUT_FAVORITE_URL  = (boardNumber : string | number ) =>`${API_DOMAIN}/board/${boardNumber}/favorite`;
 // description :  patch board  API end Point //
 const PATCH_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
+// description: delete board API end Point //
+const DELETE_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
 
 // description :  get board request //
 export const getBoardRequest = async(boardNumber : string | number)=>{
@@ -126,6 +129,22 @@ export const patchBoardRequest = async(requestBody : PatchBoardRequestDto , boar
         })
     return result;
 };
+
+// description :  delete board list request //
+export const deleteBoardRequest = async(boardNumber : string | number, token : string ) =>{
+    const result = await axios.delete(DELETE_BOARD_URL(boardNumber), authorization(token))
+        .then(response =>{
+            const responseBody : DeleteBoardResponseDto = response.data;
+            const {code} = responseBody;
+            return code;
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.reponse.data;
+            const {code} = responseBody;
+            return code;
+         })
+        return result;
+}
 
 // description :  get comment list request //
 export const getCommentListRequest = async(boardNumber : string | number) =>{
