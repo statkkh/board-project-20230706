@@ -2,9 +2,10 @@ import axios from "axios";
 import { SignInRequestDto, SignUpRequestDto } from "./dto/request/auth";
 import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
-import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
+import { GetSignInUserResponseDto, GetUserReponseDto, PatchNicknameResponseDto } from "./dto/response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
 import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto} from "./dto/response/board";
+import { PatchNicknameRequestDto } from "./dto/request/user";
 
 
 // description : Domain URL //
@@ -74,6 +75,8 @@ const PATCH_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/
 const DELETE_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
 // description:increase viewe count API end Point //
 const INCREASE_VIEW_COUNT = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
+
+
 // description :  get board request //
 export const getBoardRequest = async(boardNumber : string | number)=>{
     const result = await axios.get(GET_BOARD_URL(boardNumber))
@@ -238,15 +241,15 @@ export const putFavoriteRequest = async( boardNumber : string | number , token :
             const  { code } = responseBody;
             return code;
         });
- 
     return result; 
 }
 
 // description : get sign in use API end Point Request //
 const GET_SIGN_IN_USER_URL = () => `${API_DOMAIN}/user`;
-
 // description: get user API end point //
 const GET_USER_URL = (email : string) => `${API_DOMAIN}/user/${email}`;
+// description: patch nickname API end point //
+const PATCH_NICKNAME_URL = () =>  `${API_DOMAIN}/user/nickname`;
 
 // description :  get sign in request //
 export const getSignInUserRequest = async (token : string) => {
@@ -272,10 +275,25 @@ export const getUserRequest = async(email : string ) => {
         .catch(error=>{
             const responseBody : ResponseDto = error.response.data;
             return responseBody;
-        })
-
+        });
     return result;
 };
+
+export const patchNicknameRequest = async (requestBody : PatchNicknameRequestDto , token : string ) => {
+    const result = await axios.patch(PATCH_NICKNAME_URL(), requestBody, authorization(token))
+        .then(response =>{
+            const responseBody : PatchNicknameResponseDto = response.data;
+            const {code} = responseBody;
+            return code;
+        })
+        .catch(error=>{
+            const responseBody : ResponseDto = error.response.data;
+            const { code } = responseBody;
+            return code; 
+        });
+    return result;
+
+}
 
 // description : FILE DOMAIN 주소 //
 const FILE_DOMAIN = `${DOMAIN}/file`;
