@@ -2,6 +2,7 @@ import  { ChangeEvent, useRef, useState, useEffect }  from 'react';
 import './style.css';
 import { useBoardStore } from 'stores';
 
+//          component: 게시물 작성 화면          //
 export default function BoardWrite() {
 
     //          state: 이미지 인풋 ref 상태          //
@@ -28,7 +29,6 @@ export default function BoardWrite() {
       contentsTextAreaRef.current.style.height = 'auto';
       contentsTextAreaRef.current.style.height = `${contentsTextAreaRef.current.scrollHeight}px`;
     }
-
     //          event handler: 이미지 변경 이벤트 처리          //
     const onImageChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
       if (!event.target.files || !event.target.files.length) return;
@@ -48,7 +48,6 @@ export default function BoardWrite() {
       if (!imageInputRef.current) return;
       imageInputRef.current.click();
     }
-    
     //          event handler: 이미지 닫기 버튼 클릭 이벤트 처리          //
     const onImageCloseButtonClickHandler = (deleteIndex: number) => {
       if (!imageInputRef.current) return;
