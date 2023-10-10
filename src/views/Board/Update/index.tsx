@@ -2,7 +2,6 @@ import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { useBoardStore } from 'stores';
 import { useNavigate, useParams } from 'react-router-dom';
-import { boardMock } from 'mocks';
 import { convertUrlsToFiles } from 'utils';
 import { getBoardRequest } from 'apis';
 import { GetBoardResponseDto } from 'apis/dto/response/board';
@@ -27,7 +26,6 @@ export default function BoardUpdate() {
 
   //          function: 네비게이트 함수           //
   const navigator = useNavigate();
-
   //        function : get board response   처리 함수         //
   const getBoardResponse = (responseBody : GetBoardResponseDto | ResponseDto) =>{
     const { code } = responseBody;
@@ -44,6 +42,7 @@ export default function BoardUpdate() {
     convertUrlsToFiles(boardImageList).then(files => setImages(files));
     setImageUrls(boardImageList);   
   }
+  
   //          event handler: 제목 변경 이벤트 처리          //
   const onTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const title = event.target.value;
