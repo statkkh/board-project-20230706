@@ -8,8 +8,8 @@ import { useUserStore } from 'stores';
 import { usePagination } from 'hooks';
 import CommentItem from 'components/CommentItem';
 import Pagination from 'components/Pagination';
-import { BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from 'constant';
-import { getBoardRequest, getCommentListRequest, getFavoriteListRequest, postCommentRequest, putFavoriteRequest } from 'apis';
+import { AUTH_PATH, BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from 'constant';
+import { deleteBoardRequest, getBoardRequest, getCommentListRequest, getFavoriteListRequest, postCommentRequest, putFavoriteRequest } from 'apis';
 import FavoriteItem from 'types/favorite-list-item.interface';
 import { GetBoardResponseDto, GetCommentListResponseDto, GetFavoriteListResponseDto } from 'apis/dto/response/board';
 import ResponseDto from 'apis/dto/response';
@@ -63,6 +63,21 @@ export default function BoardDetail() {
       setWriter(isWriter);
     };
 
+    //      function : delete board response 처리 함수  //
+    const deleteBoardResponse = ( code : string)=>{
+      if(code === 'VF') alert('잘못된 접근입니다.');
+      if(code === 'NU' || code ==='AF'){
+       navigator(AUTH_PATH);
+       return;
+      }
+      if(code ==='NB') alert('존재하지 않는 게시물입니다.');
+      if(code ==='NP') alert('권한이 없습니다.');
+      if(code ==='DBE') alert('데이터 베이스 오류입니다.');
+      if(code !=='SU') return;
+
+      navigator(MAIN_PATH);
+    }
+
     //          event handler: 작성자 클릭 이벤트 처리          //
     const onNicknameClickHandler = () => {
       if (!board) return;
@@ -80,8 +95,9 @@ export default function BoardDetail() {
     };
     //          event handler: 삭제 버튼 클릭 이벤트 처리          //
     const onDeleteButtonClickHandler = () => {
-      alert(`${boardNumber} 게시물 삭제!`);
-      navigator(MAIN_PATH);
+      const accessToken = cookies.accessToken;
+      if(!boardNumber || accessToken) return;
+      deleteBoardRequest(boardNumber, accessToken).then(deleteBoardResponse);      
     };
 
     //          effect: 게시물 번호 path variable이 바뀔때 마다 게시물 불러오기          //

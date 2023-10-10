@@ -4,7 +4,8 @@ import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto } from "./dto/response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto} from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto} from "./dto/response/board";
+
 
 
 // description : Domain URL //
@@ -60,6 +61,8 @@ const GET_FAVORITE_LIST_URL = (boardNumber : string | number ) => `${API_DOMAIN}
 const GET_COMMENT_LIST_URL = (boardNumber : string | number ) => `${API_DOMAIN}/board/${boardNumber}/comment-list`;
 // description : get latest board list API end point // 
 const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`;
+// description : get user board list API end point //
+const GET_USER_BOARD_LIST_URL = (email : string) => `${API_DOMAIN}/board/user-board-list/${email}`;
 // description :  post board API end Point //
 const POST_BOARD_URL =() => `${API_DOMAIN}/board`;
 // description :  post comment API end Point //
@@ -113,6 +116,19 @@ export const getLatestBoardListRequest = async()=>{
     return result;    
 }
 
+// description : get 
+export const getUserBoardListReqest = async(email : string) =>{
+    const result = await axios.get(GET_USER_BOARD_LIST_URL(email))
+        .then(response =>{
+            const responseBody : GetUserBoardListResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error=>{
+            const responseBody : ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;   
+}
 
 // description :patch board request// 
 export const patchBoardRequest = async(requestBody : PatchBoardRequestDto , boardNumber: string | number , token : string) =>{
