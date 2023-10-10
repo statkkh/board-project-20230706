@@ -1,17 +1,17 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import  { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { useNavigate, useParams } from 'react-router-dom';
-import userBoardListMock from 'mocks/user-board-list.mock';
 import { useUserStore } from 'stores';
 import { usePagination } from 'hooks';
 import {  BoardListItem } from 'types';
 
 import Pagination from 'components/Pagination';
 import { AUTH_PATH, BOARD_WRITE_PATH, MAIN_PATH, USER_PATH } from 'constant';
-import { getUserRequest } from 'apis';
+import { getUserBoardListRequest, getUserRequest } from 'apis';
 import { GetUserReponseDto } from 'apis/dto/response/user';
 import ResponseDto from 'apis/dto/response';
 import BoardItem from 'components/BoardItem';
+import { GetUserBoardListResponseDto } from 'apis/dto/response/board';
 
 //          component: 유저 페이지          //
 export default function User() {
@@ -131,7 +131,20 @@ export default function User() {
     viewBoardList, viewPageNumberList, totalSection, setBoardList } = usePagination<BoardListItem>(5);
     //          state: 게시물 개수 상태          //
     const [count, setCount] = useState<number>(0);
+    // function :  get user board list response 처리 함수  //
+    const getUserBoardResponse   = (responseBody : GetUserBoardListResponseDto | ResponseDto) =>{
+      const {code} = responseBody;
+      if(code ==='NU') alert('존재하지 않는 유저입니다.');
+      if(code ==='DBE') alert('데이터 베이스 오류입니다.');
+      if(code !=='SU'){
+        navigator(MAIN_PATH);
+        return;
+      }
 
+      const {userBoardList} =  responseBody as GetUserBoardListResponseDto;
+      setBoardList(userBoardList);
+      setCount(userBoardList.length)
+    }
     //          event handler: 버튼 클릭 이벤트 처리          //
     const onButtonClickHandler = () => {
       if (!user) {
@@ -146,8 +159,11 @@ export default function User() {
 
     //          effect: 조회하는 유저의 이메일이 변경될 때 마다 실행할 함수 //
     useEffect(() => {
-      setBoardList(userBoardListMock);
-      setCount(userBoardListMock.length);
+      if(!searchEmail){
+        navigator(MAIN_PATH);
+        return;
+      }
+      getUserBoardListRequest(searchEmail).then(getUserBoardResponse);
     }, [searchEmail]);
 
     //          render: 유저 게시물 컴포넌트 렌더링          //

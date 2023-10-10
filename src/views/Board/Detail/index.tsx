@@ -96,7 +96,7 @@ export default function BoardDetail() {
     //          event handler: 삭제 버튼 클릭 이벤트 처리          //
     const onDeleteButtonClickHandler = () => {
       const accessToken = cookies.accessToken;
-      if(!boardNumber || accessToken) return;
+      if(!boardNumber || !accessToken) return;
       deleteBoardRequest(boardNumber, accessToken).then(deleteBoardResponse);      
     };
 

@@ -117,7 +117,7 @@ export const getLatestBoardListRequest = async()=>{
 }
 
 // description : get user board list request //
-export const getUserBoardListReqest = async(email : string) =>{
+export const getUserBoardListRequest = async(email : string) =>{
     const result = await axios.get(GET_USER_BOARD_LIST_URL(email))
         .then(response =>{
             const responseBody : GetUserBoardListResponseDto = response.data;
