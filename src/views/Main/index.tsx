@@ -8,7 +8,7 @@ import { SEARCH_PATH } from 'constant';
 import BoardItem from 'components/BoardItem';
 import Pagination from 'components/Pagination';
 import { usePagination } from 'hooks';
-import GetLatestBoardListResponseDto from 'apis/dto/response/board/get-latest-board-list-response.dto';
+import GetLatestBoardListResponseDto from 'apis/dto/response/board/get-latest-board-list.response.dto';
 import ResponseDto from 'apis/dto/response';
 import { getLatestBoardListRequest } from 'apis';
 
