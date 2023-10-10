@@ -1,17 +1,20 @@
 import  { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import { useUserStore } from 'stores';
 import { usePagination } from 'hooks';
 import {  BoardListItem } from 'types';
-
+import BoardItem from 'components/BoardItem';
 import Pagination from 'components/Pagination';
 import { AUTH_PATH, BOARD_WRITE_PATH, MAIN_PATH, USER_PATH } from 'constant';
-import { getUserBoardListRequest, getUserRequest } from 'apis';
+import { getUserBoardListRequest, getUserRequest, patchNicknameRequest } from 'apis';
 import { GetUserReponseDto } from 'apis/dto/response/user';
 import ResponseDto from 'apis/dto/response';
-import BoardItem from 'components/BoardItem';
 import { GetUserBoardListResponseDto } from 'apis/dto/response/board';
+import { useCookies } from 'react-cookie';
+
+import { PatchNicknameRequestDto } from 'apis/dto/request/user';
 
 //          component: 유저 페이지          //
 export default function User() {
@@ -22,6 +25,7 @@ export default function User() {
   const { user } = useUserStore();
   //          state: 본인 여부 상태           //
   const [isMyPage, setMyPage] = useState<boolean>(false);
+
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
 
@@ -30,29 +34,56 @@ export default function User() {
 
     //          state: 프로필 이미지 input ref 상태           //
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    //          state: cookie 상태           //
+    const [cookie, setCookies]  = useCookies(); 
     //          state: 이메일 상태           //
     const [email, setEmail] = useState<string>('');
     //          state: 프로필 이미지 상태           //
     const [profileImage, setProfileImage] = useState<string | null>('');
+    //          state: 기존 닉네임 상태         //
+    const [existingNickname, setExistingNickname] = useState<string>('');
     //          state: 닉네임 상태           //
-    const [nickname, setNickname] = useState<string>('나는룬아니엘');
+    const [nickname, setNickname] = useState<string>('');
     //          state: 닉네임 변경 상태           //
     const [showChangeNickname, setShowChangeNickname] = useState<boolean>(false);
 
     //  function : get user response 처리 함수 
     const getUserResponse = ( responseBody : GetUserReponseDto | ResponseDto) => {
-      const {code} = responseBody;
+      const { code } = responseBody;
       if(code === 'NU') alert("존재하지 않는 유저입니다.");
       if(code === 'DBE') alert("데이터베이스 오류입니다."); 
       if(code !== 'SU'){
         navigator(MAIN_PATH);
         return;
       }      
+
       const {email, nickname, profileImage} = responseBody as GetUserReponseDto;
       setEmail(email);
       setNickname(nickname);
+      setExistingNickname(existingNickname);
       setProfileImage(profileImage);
-    }
+    };
+
+    // function : patch nickname response 처리 함수 //
+    const patchNicknameResponse = ( code  : string ) =>{
+      if(code === 'AF' || code === 'NU'){
+        alert('로그인 필요')        
+        navigator(AUTH_PATH);
+        return;
+      }
+      if(code === 'VF')alert('빈 값일수 없습니다.');
+      if(code === 'DN') alert('중복되는 닉네임입니다.');
+      if(code === 'DBE') alert('데이터베이스 오류입니다.');
+      if(code !== 'SU'){
+        setNickname(existingNickname);
+        return;
+      }
+      if(!searchEmail) return;
+      getUserRequest(searchEmail).then(getUserResponse);
+      // TODO : 로그인 유저 정보 불러오기 //
+
+      setShowChangeNickname(false);
+    };
 
     //          event handler: 프로필 이미지 클릭 이벤트 처리          //
     const onProfileImageClickHandler = () => {
@@ -62,7 +93,16 @@ export default function User() {
     }
     //          event handler: 닉네임 변경 버튼 클릭 이벤트 처리          //
     const onChangeNicknameButtonClickHandler = () => {
-      setShowChangeNickname(!showChangeNickname);
+      if(!showChangeNickname){
+        setShowChangeNickname(true);
+        return;
+      }
+
+      const accessToken = cookie.accessToken ;
+      if(!accessToken) return;
+      
+      const requestBody : PatchNicknameRequestDto = { nickname };
+      patchNicknameRequest(requestBody, accessToken).then(patchNicknameResponse);
     }
 
     //          event handler: 프로필 이미지 변경 이벤트 처리          //
@@ -120,7 +160,6 @@ export default function User() {
         </div>
       </div>
     );
-
   };
 
   //          component: 유저 게시물 컴포넌트          //
@@ -131,13 +170,14 @@ export default function User() {
     viewBoardList, viewPageNumberList, totalSection, setBoardList } = usePagination<BoardListItem>(5);
     //          state: 게시물 개수 상태          //
     const [count, setCount] = useState<number>(0);
+
     // function :  get user board list response 처리 함수  //
     const getUserBoardResponse   = (responseBody : GetUserBoardListResponseDto | ResponseDto) =>{
       const {code} = responseBody;
       if(code ==='NU') alert('존재하지 않는 유저입니다.');
       if(code ==='DBE') alert('데이터 베이스 오류입니다.');
       if(code !=='SU'){
-        navigator(MAIN_PATH);
+        navigator(MAIN_PATH); 
         return;
       }
 
@@ -222,7 +262,7 @@ export default function User() {
   useEffect(() => {
     const isMyPage = searchEmail === user?.email;
     setMyPage(isMyPage);
-  } , [searchEmail]);
+  } , [searchEmail, user]);
 
   //          render: 유저 페이지 렌더링          //
   return (
