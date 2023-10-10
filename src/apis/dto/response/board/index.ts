@@ -8,6 +8,7 @@ import PostCommentResponseDto from "./post-comment.response.dto";
 import PatchBoardResponseDto from "./patch-board.response.dto";
 import DeleteBoardResponseDto from "./delete-board.response.dto";
 import GetUserBoardListResponseDto from "./get-user-board-list.response.dto";
+import IncreaseViewCountResponseDto from "./increase-view-count-response.dto";
 
 export type{
     GetBoardResponseDto,
@@ -19,5 +20,6 @@ export type{
     GetCommentListResponseDto,
     PatchBoardResponseDto,
     DeleteBoardResponseDto,
-    GetUserBoardListResponseDto
+    GetUserBoardListResponseDto,
+    IncreaseViewCountResponseDto
 }

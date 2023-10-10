@@ -9,7 +9,7 @@ import { usePagination } from 'hooks';
 import CommentItem from 'components/CommentItem';
 import Pagination from 'components/Pagination';
 import { AUTH_PATH, BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from 'constant';
-import { deleteBoardRequest, getBoardRequest, getCommentListRequest, getFavoriteListRequest, postCommentRequest, putFavoriteRequest } from 'apis';
+import { deleteBoardRequest, getBoardRequest, getCommentListRequest, getFavoriteListRequest,  increaseViewCountRequest, postCommentRequest, putFavoriteRequest } from 'apis';
 import FavoriteItem from 'types/favorite-list-item.interface';
 import { GetBoardResponseDto, GetCommentListResponseDto, GetFavoriteListResponseDto } from 'apis/dto/response/board';
 import ResponseDto from 'apis/dto/response';
@@ -28,6 +28,13 @@ export default function BoardDetail() {
   const [cookies , setCookies] = useCookies();
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
+
+  // function :  increase view count response //
+  const  increaseViewCountResponse = (code :string) =>{
+    if(code === 'DBE') alert('데이터 베이스 오류입니다.')
+    if(code === 'NB') alert('존재하지 않는 게시물입니다.')
+  }
+
     
   //          component: 게시물 상세보기 상단 컴포넌트          //
   const BoardDetailTop = () => {
@@ -55,12 +62,13 @@ export default function BoardDetail() {
         return;
       }
 
-      const board: Board = {...responseBody as GetBoardResponseDto};
+      const responseboard: Board = {...responseBody as GetBoardResponseDto};
       setBoard(board);
 
       if (!user) return;
-      const isWriter = user.email === board.writerEmail;
+      const isWriter = user.email === responseboard.writerEmail;
       setWriter(isWriter);
+
     };
 
     //      function : delete board response 처리 함수  //
@@ -102,6 +110,8 @@ export default function BoardDetail() {
 
     //          effect: 게시물 번호 path variable이 바뀔때 마다 게시물 불러오기          //
     useEffect(() => {
+      if(effectFlag) return;
+      effectFlag = true;
       if( !boardNumber) {
         alert('잘못된 접근입니다.');
         navigator(MAIN_PATH);
@@ -350,6 +360,19 @@ export default function BoardDetail() {
     )
   };  
 
+  // effect : 첫 랜더시 실행 함수 //
+  let effectFlag = true;
+  useEffect( ()=>{
+
+    if(effectFlag){
+      effectFlag = false;
+      return;
+    }
+
+    if(!boardNumber) return;
+    increaseViewCountRequest(boardNumber).then(increaseViewCountResponse);
+
+  },[])
   return (
     <div  id='board-detail-wrapper'>
       <div className='board-detail-container'>
