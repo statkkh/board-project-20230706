@@ -10,7 +10,8 @@ import Pagination from 'components/Pagination';
 import { usePagination } from 'hooks';
 import GetLatestBoardListResponseDto from 'apis/dto/response/board/get-latest-board-list.response.dto';
 import ResponseDto from 'apis/dto/response';
-import { getLatestBoardListRequest } from 'apis';
+import { getLatestBoardListRequest, getTop3BoardListRequest } from 'apis';
+import { GetTop3BoardListResponseDto } from 'apis/dto/response/board';
 
 //          component: 메인 페이지          //
 export default function Main() {
@@ -21,10 +22,18 @@ export default function Main() {
     //          state: 주간 Top3 게시물 리스트 상태          //
     const [top3List, setTop3List] = useState<BoardListItem[]>([]);
 
+    // function : get top3  board list response  //
+    const getTop3BoardListResponse = (responseBody: GetTop3BoardListResponseDto | ResponseDto ) =>{
+      const { code } = responseBody;
+      if(code === 'DBE') alert('데이터 베이스 오류입니다.');
+      if(code !== 'SU') return; 
+
+      const { top3List } = responseBody as GetTop3BoardListResponseDto;
+      setTop3List(top3List);
+    }
     //          effect: 컴포넌트 마운트 시 top3 리스트 불러오기          //
     useEffect(() => {
-      // TODO: API 호출로 변경
-      setTop3List(top3ListMock);
+      getTop3BoardListRequest().then(getTop3BoardListResponse);
     }, []);
 
     //          render: 메인 상단 컴포넌트 렌더링          //

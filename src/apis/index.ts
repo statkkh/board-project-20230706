@@ -4,7 +4,7 @@ import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto, PatchNicknameResponseDto, PatchProfileImageResponseDto } from "./dto/response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto} from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto, GetTop3BoardListResponseDto} from "./dto/response/board";
 import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from "./dto/request/user";
 
 
@@ -63,6 +63,8 @@ const GET_COMMENT_LIST_URL = (boardNumber : string | number ) => `${API_DOMAIN}/
 const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`;
 // description : get user board list API end point //
 const GET_USER_BOARD_LIST_URL = (email : string) => `${API_DOMAIN}/board/user-board-list/${email}`;
+//description : get top3 board list API end Point //
+const GET_TOP3_BOARD_LIST_URL = ( ) => `${API_DOMAIN}/board/top-3`;
 // description :  post board API end Point //
 const POST_BOARD_URL =() => `${API_DOMAIN}/board`;
 // description :  post comment API end Point //
@@ -131,6 +133,21 @@ export const getUserBoardListRequest = async(email : string) =>{
             return responseBody;
         })
     return result;   
+}
+
+// description : top3 board list requets // 
+export const getTop3BoardListRequest = async() =>{
+    const result = await axios.get(GET_TOP3_BOARD_LIST_URL()) 
+        .then(response=>{
+            const responseBody : GetTop3BoardListResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.reponse.data;
+            return responseBody;
+        });
+    
+    return result;
 }
 
 // description :patch board request// 

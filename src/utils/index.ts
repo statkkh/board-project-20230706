@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 export const convertUrlsToFiles = async (urls: string[]) => {
     const files = [];
     for (let index = 0; index < urls.length; index++) {
@@ -15,4 +16,18 @@ export const convertUrlToFile = async (url: string) => {
     const meta = { type: `image/${extd}` };
 
     return new File([data], fileName as string, meta);    
+}
+
+//          function : 작성일 포멧 변경 함수         //
+export const getWriteDatetimeFormat = (writeDatetime :string | undefined)=>{
+    if(!writeDatetime) return '';
+    const date = dayjs(writeDatetime);
+    return date.format("YYYY. MM. DD.");
+}
+
+
+// description : //
+export const cutString = (str : string | undefined, size : number) =>{
+    if(!str) return '';
+    return str.length > 50? str.substring(0 , 50) + '...' : str;
 }

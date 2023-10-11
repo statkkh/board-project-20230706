@@ -9,17 +9,19 @@ import PatchBoardResponseDto from "./patch-board.response.dto";
 import DeleteBoardResponseDto from "./delete-board.response.dto";
 import GetUserBoardListResponseDto from "./get-user-board-list.response.dto";
 import IncreaseViewCountResponseDto from "./increase-view-count.response.dto";
+import GetTop3BoardListResponseDto from "./get-top3-board-list.response.dto";
 
 export type{
     GetBoardResponseDto,
     PostBoardResponseDto,
+    PatchBoardResponseDto,
     PostCommentResponseDto,
     GetFavoriteListResponseDto,
     GetLatestBoardListResponseDto,
     PutFavoriteResponseDto,
     GetCommentListResponseDto,
-    PatchBoardResponseDto,
     DeleteBoardResponseDto,
+    GetTop3BoardListResponseDto,
     GetUserBoardListResponseDto,
     IncreaseViewCountResponseDto
 }
