@@ -2,10 +2,10 @@ import axios from "axios";
 import { SignInRequestDto, SignUpRequestDto } from "./dto/request/auth";
 import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
-import { GetSignInUserResponseDto, GetUserReponseDto, PatchNicknameResponseDto } from "./dto/response/user";
+import { GetSignInUserResponseDto, GetUserReponseDto, PatchNicknameResponseDto, PatchProfileImageResponseDto } from "./dto/response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
 import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto} from "./dto/response/board";
-import { PatchNicknameRequestDto } from "./dto/request/user";
+import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from "./dto/request/user";
 
 
 // description : Domain URL //
@@ -250,6 +250,8 @@ const GET_SIGN_IN_USER_URL = () => `${API_DOMAIN}/user`;
 const GET_USER_URL = (email : string) => `${API_DOMAIN}/user/${email}`;
 // description: patch nickname API end point //
 const PATCH_NICKNAME_URL = () =>  `${API_DOMAIN}/user/nickname`;
+// description: patch profile image API end Point //
+const PATCH_PROFILE_IMAGE_URL = () => `${API_DOMAIN}/user/profile-image`;
 
 // description :  get sign in request //
 export const getSignInUserRequest = async (token : string) => {
@@ -278,7 +280,7 @@ export const getUserRequest = async(email : string ) => {
         });
     return result;
 };
-
+// description patch nickname request //
 export const patchNicknameRequest = async (requestBody : PatchNicknameRequestDto , token : string ) => {
     const result = await axios.patch(PATCH_NICKNAME_URL(), requestBody, authorization(token))
         .then(response =>{
@@ -293,6 +295,21 @@ export const patchNicknameRequest = async (requestBody : PatchNicknameRequestDto
         });
     return result;
 
+}
+// description : patch profile image request // 
+export const patchProfileImageRequest = async ( requestBody : PatchProfileImageRequestDto, token : string ) => {
+    const result = await axios.patch(PATCH_PROFILE_IMAGE_URL(), requestBody, authorization(token))
+        .then(response =>{
+            const responseBody : PatchProfileImageResponseDto = response.data;
+            const { code } = responseBody;
+            return code;
+        })
+        .catch(error=>{
+            const responseBody : ResponseDto = error.response.data;
+            const { code }  = responseBody;
+            return code; 
+        })
+    return result;
 }
 
 // description : FILE DOMAIN 주소 //
