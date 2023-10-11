@@ -4,7 +4,7 @@ import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto, PatchNicknameResponseDto, PatchProfileImageResponseDto } from "./dto/response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto, GetTop3BoardListResponseDto} from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto, GetTop3BoardListResponseDto, getSearchBoardListResponstDto} from "./dto/response/board";
 import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from "./dto/request/user";
 
 
@@ -65,6 +65,8 @@ const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`;
 const GET_USER_BOARD_LIST_URL = (email : string) => `${API_DOMAIN}/board/user-board-list/${email}`;
 //description : get top3 board list API end Point //
 const GET_TOP3_BOARD_LIST_URL = ( ) => `${API_DOMAIN}/board/top-3`;
+// description : get search board list API end Point  //
+const GET_SEARCH_BOARD_LIST_URL = ( searchWord : string , preSearchWord : string | undefined ) => `${API_DOMAIN}/board/search-list/${searchWord}${preSearchWord ?  '/' + preSearchWord : ''}}`;
 // description :  post board API end Point //
 const POST_BOARD_URL =() => `${API_DOMAIN}/board`;
 // description :  post comment API end Point //
@@ -77,7 +79,6 @@ const PATCH_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/
 const DELETE_BOARD_URL = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
 // description:increase viewe count API end Point //
 const INCREASE_VIEW_COUNT = (boardNumber : string | number) => `${API_DOMAIN}/board/${boardNumber}`;
-
 
 // description :  get board request //
 export const getBoardRequest = async(boardNumber : string | number)=>{
@@ -135,7 +136,7 @@ export const getUserBoardListRequest = async(email : string) =>{
     return result;   
 }
 
-// description : top3 board list requets // 
+// description : get top3 board list requets // 
 export const getTop3BoardListRequest = async() =>{
     const result = await axios.get(GET_TOP3_BOARD_LIST_URL()) 
         .then(response=>{
@@ -148,6 +149,20 @@ export const getTop3BoardListRequest = async() =>{
         });
     
     return result;
+}
+
+//  description  : get search board list request  //
+export const getSearchWordBoardListRequest = async(searchWord : string , preSearchWord : string | undefined) =>{
+    const result = await axios.get(GET_SEARCH_BOARD_LIST_URL(searchWord, preSearchWord))
+        .then(response =>{
+            const responseBody : getSearchBoardListResponstDto = response.data;
+            return responseBody;
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;        
 }
 
 // description :patch board request// 
