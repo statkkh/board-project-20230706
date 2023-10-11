@@ -1,31 +1,47 @@
 import  React,{ useEffect, useState } from 'react';
 import './style.css';
-import { boardMock, relationWordListMock, searchListMock } from 'mocks';
+import {  relationWordListMock } from 'mocks';
 import { useNavigate, useParams } from 'react-router-dom';
 import { usePagination } from 'hooks';
 import { SEARCH_PATH } from 'constant';
 import BoardItem from 'components/BoardItem';
 import Pagination from 'components/Pagination';
 import { BoardListItem } from 'types';
+import { GetSearchBoardListResponstDto } from 'apis/dto/response/board';
+import { getSearchWordBoardListRequest } from 'apis';
+import ResponseDto from 'apis/dto/response';
 
 //          component: 검색 페이지          //
 export default function Search() {
 
   //          state: 검색어 path variable 상태          //
   const {word} = useParams();
-
+  //          state:                    //
   const {currentPageNumber, currentSectionNumber, setCurrentPageNumber, setCurrentSectionNumber,
      viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination<BoardListItem>(5); 
-
   //          state: 검색 결과 개수 상태          //
   const [count, setCount] = useState<number>(0);   
 
   //          state: 연관 검색어 리스트 상태          //
   const [relationWordList, setRelationWordList] = useState<string[]>([]);  
+  //          state: 이전 검색어 상태          //
+  const [preSearchWord, setPreSearchWord] = useState<string | undefined > (undefined);
+  //          state: effect flag 상태          // 
+  const [effectFlag , setEffectFlag] = useState<boolean>(true);
 
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
-    
+  // function : get word getSearchWordBoardListResponse //
+  const getSearchWordBoardListResponse = (responseBody : GetSearchBoardListResponstDto | ResponseDto) =>{
+    const {code } = responseBody;
+    if(code ==='DBE') alert('데이터 베이스 오류입니다.');
+    if(code !== 'SU') return;
+
+    const { searchList } = responseBody as GetSearchBoardListResponstDto;
+    setBoardList(searchList);
+    setCount(searchList.length);
+    setPreSearchWord(word);
+  }
   //          event handler: 관련 검색어 뱃지 클릭 이벤트 처리          //
   const onWordBadgeClickHandler = (word: string) => {
     navigator(SEARCH_PATH(word));
@@ -33,10 +49,12 @@ export default function Search() {
   
   //          effect: 'word' path variable이 변경될 때 마다 검색 결과 불러오기          //
   useEffect(() => {
+    if(effectFlag){
+      setEffectFlag(false);
+      return;
+    }
     if (!word) return;
-    const boardList = searchListMock(word);
-    setBoardList(boardList);
-    setCount(boardList.length);
+    getSearchWordBoardListRequest(word, preSearchWord).then(getSearchWordBoardListResponse);
     setRelationWordList(relationWordListMock);
   }, [word]);  
 
@@ -45,7 +63,7 @@ export default function Search() {
     <div id = 'search-wrapper'>
       <div className='search-container'>
         <div className='search-title-box'>
-          <div className='search-title'><span className='search-title-emphasis'>{boardMock?.title}</span>{'에 대한 검색결과 입니다.'}</div>
+          <div className='search-title'><span className='search-title-emphasis'>{word}</span>{'에 대한 검색결과 입니다.'}</div>
           <div className='search-count'>{count}</div>
         </div>    
           <div className='search-contents-box'>
