@@ -22,7 +22,7 @@ export default function Main() {
     //          state: 주간 Top3 게시물 리스트 상태          //
     const [top3List, setTop3List] = useState<BoardListItem[]>([]);
 
-    // function : get top3  board list response  //
+    // function : get top3  board list responseget top3  board list response  //
     const getTop3BoardListResponse = (responseBody: GetTop3BoardListResponseDto | ResponseDto ) =>{
       const { code } = responseBody;
       if(code === 'DBE') alert('데이터 베이스 오류입니다.');
