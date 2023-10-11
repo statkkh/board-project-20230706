@@ -41,62 +41,62 @@ export default function Header() {
     navigator(MAIN_PATH);
   }
 
-    const Search = () => {
-        //          state: 검색 버튼 상태          //
-        const [showInput, setShowInput] = useState<boolean>(false);
-        //          state: 검색 값 상태          //
-        const [searchValue, setSearchValue] = useState<string>('');   
-   
-          
-        //          event handler: 검색 값 변경 이벤트 처리          //
-        const onSearchValueChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-          const searchValue = event.target.value;
-          setSearchValue(searchValue);
-        }
+  //          component: 검색 컴포넌트          //
+  const Search = () => {
+    //          state: 검색 버튼 상태          //
+    const [showInput, setShowInput] = useState<boolean>(false);
+    //          state: 검색 값 상태          //
+    const [searchValue, setSearchValue] = useState<string>('');   
+      
+    //          event handler: 검색 값 변경 이벤트 처리          //
+    const onSearchValueChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      const searchValue = event.target.value;
+      setSearchValue(searchValue);
+    }
 
-        //          event handler: 검색 인풋 Enter key down 이벤트 처리          //
-        const onSearchEnterKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-            if (event.key !== 'Enter') return;
-            if (!searchValue) return;
-            navigator(SEARCH_PATH(searchValue));
-        }        
+    //          event handler: 검색 인풋 Enter key down 이벤트 처리          //
+    const onSearchEnterKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key !== 'Enter') return;
+        if (!searchValue) return;
+        navigator(SEARCH_PATH(searchValue));
+    }        
 
-        //          event handler: 검색 버튼 클릭 이벤트 처리          //        
-        const onSearchButtonClickHandler = () => {
-          // description : Check if the search input is visible.
-          if(!showInput){  
-            setShowInput(true);
-            return;
-          }      
-          // Check if the search value is empty.
-          if (!searchValue) {
-            setShowInput(false);
-            return;
-          }
-          navigator(SEARCH_PATH(searchValue));  
-        }  
+    //          event handler: 검색 버튼 클릭 이벤트 처리          //        
+    const onSearchButtonClickHandler = () => {
+      // description : Check if the search input is visible.
+      if(!showInput){  
+        setShowInput(true);
+        return;
+      }      
+      // Check if the search value is empty.
+      if (!searchValue) {
+        setShowInput(false);
+        return;
+      }
+      navigator(SEARCH_PATH(searchValue));  
+    }  
 
-      //          render: 검색 컴포넌트 렌더링  (인풋이 보임 상태일 때)         //
-      if(showInput)
-      return(
-        <div className='header-search-input-box'>
-            <input className='header-search-input' value={searchValue} onChange={onSearchValueChangeHandler}  onKeyDown={onSearchEnterKeyDownHandler}/> 
-            <div className='icon-button' onClick={onSearchButtonClickHandler}>
-              <div className='search-icon'></div>
-            </div>
-        </div>
-      );
+    //          render: 검색 컴포넌트 렌더링  (인풋이 보임 상태일 때)         //
+    if(showInput)
+    return(
+      <div className='header-search-input-box'>
+          <input className='header-search-input' value={searchValue} onChange={onSearchValueChangeHandler}  onKeyDown={onSearchEnterKeyDownHandler}/> 
+          <div className='icon-button' onClick={onSearchButtonClickHandler}>
+            <div className='search-icon'></div>
+          </div>
+      </div>
+    );
 
-      //          render: 검색 컴포넌트 렌더링 (인풋이 보임 상태가 아닐 때)         //
-      return(
-        <div className='icon-button' onClick={onSearchButtonClickHandler}>
-          <div className='search-icon'></div>
-        </div>
-      );
-    };  
+    //          render: 검색 컴포넌트 렌더링 (인풋이 보임 상태가 아닐 때)         //
+    return(
+      <div className='icon-button' onClick={onSearchButtonClickHandler}>
+        <div className='search-icon'></div>
+      </div>
+    );
+  };  
 
-    //          component: 로그인 상태에 따라 로그인 혹은 마이페이지 버튼 컴포넌트          //
-    const LoginMyPageButton = () => {
+  //          component: 로그인 상태에 따라 로그인 혹은 마이페이지 버튼 컴포넌트          //
+  const LoginMyPageButton = () => {
 
     //          event handler: 마이페이지 버튼 클릭 이벤트 처리         //
       const onMyPageButtonClickHandler = () => {
@@ -176,7 +176,8 @@ export default function Header() {
 
       const boardImageList : string[] = [];
 
-      // description :java for each구문과 유사
+      console.log(images);
+      // description :java for each구문과 유사 // 
       for(const image of images) {
         const data =  new FormData();
         data.append('file',image);
@@ -191,6 +192,7 @@ export default function Header() {
         }
         postBoardRequest(requestBody, accessToken).then(postBoardResponse);
       }
+
       if (isBoardUpdatePage) {
         if(!boardNumber) return;
         const  requestBody : PatchBoardRequestDto = {
