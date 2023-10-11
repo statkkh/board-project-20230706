@@ -25,7 +25,7 @@ export default function BoardDetail() {
   //          state: 로그인 유저 상태          //
   const { user } = useUserStore();
   //          state: cookies 상태          //
-  const [cookies , setCookies] = useCookies();
+  const [cookies , setCookie] = useCookies();
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
 
@@ -67,7 +67,6 @@ export default function BoardDetail() {
       if (!user) return;
       const isWriter = user.email === responseboard.writerEmail;
       setWriter(isWriter);
-
     };
 
     //      function : delete board response 처리 함수  //
@@ -109,15 +108,13 @@ export default function BoardDetail() {
 
     //          effect: 게시물 번호 path variable이 바뀔때 마다 게시물 불러오기          //
     useEffect(() => {
-      if(effectFlag) return;
-      effectFlag = true;
       if( !boardNumber) {
         alert('잘못된 접근입니다.');
         navigator(MAIN_PATH);
         return;
       }
       getBoardRequest(boardNumber).then(getBoardResponse);
-     }, [boardNumber]);
+     }, []);
      
     //          render: 게시물 상세보기 하단 컴포넌트 렌더링          //
     return(
