@@ -4,7 +4,7 @@ import { SignUpResponseDto ,SignInResponseDto} from "./dto/response/auth";
 import ResponseDto from './dto/response';
 import { GetSignInUserResponseDto, GetUserReponseDto, PatchNicknameResponseDto, PatchProfileImageResponseDto } from "./dto/response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
-import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto, GetTop3BoardListResponseDto, getSearchBoardListResponstDto} from "./dto/response/board";
+import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto, GetTop3BoardListResponseDto, GetSearchBoardListResponstDto} from "./dto/response/board";
 import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from "./dto/request/user";
 
 
@@ -155,7 +155,7 @@ export const getTop3BoardListRequest = async() =>{
 export const getSearchWordBoardListRequest = async(searchWord : string , preSearchWord : string | undefined) =>{
     const result = await axios.get(GET_SEARCH_BOARD_LIST_URL(searchWord, preSearchWord))
         .then(response =>{
-            const responseBody : getSearchBoardListResponstDto = response.data;
+            const responseBody : GetSearchBoardListResponstDto = response.data;
             return responseBody;
         })
         .catch(error =>{
