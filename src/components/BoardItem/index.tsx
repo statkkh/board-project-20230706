@@ -4,7 +4,7 @@ import DefaultProfileImage from "assets/default-profile-image.png";
 import { BoardListItem } from 'types';
 import { useNavigate } from 'react-router-dom';
 import { BOARD_DETAIL_PATH } from 'constant';
-import { cutString } from 'utils';
+import { cutString,getWriteDatetimeFormat  } from 'utils';
 
 
 //          interface: 게시물 리스트 아이템 컴포넌트 Props          //
@@ -29,9 +29,6 @@ export default function BoardItem({ boardItem }: Props) {
     navigator(BOARD_DETAIL_PATH(boardNumber));
   }
 
-  function getWriteDateTimeFormat(writeDatetime: string): React.ReactNode {
-    throw new Error('Function not implemented.');
-  }
 
   // TODO: 타이틀과 내용 초과 범위 처리
   //          render: 게시물 리스트 아이템 컴포넌트 렌더링         //
@@ -45,7 +42,7 @@ export default function BoardItem({ boardItem }: Props) {
           </div>
           <div className='board-list-item-write-box'>
             <div className='board-list-item-nickname'>{writerNickname}</div>
-            <div className='board-list-item-write-date'>{getWriteDateTimeFormat(writeDatetime)}</div>
+            <div className='board-list-item-write-date'>{getWriteDatetimeFormat(writeDatetime)}</div>
           </div>
         </div>
         <div className='board-list-item-middle'>
