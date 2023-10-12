@@ -56,7 +56,7 @@ export default function Search() {
     if (!word) return;
     getSearchWordBoardListRequest(word, preSearchWord).then(getSearchWordBoardListResponse);
     setRelationWordList(relationWordListMock);
-  }, [word]);  
+  }, [word, effectFlag]);  
 
   //          render: 검색 페이지 렌더링          //  
   return (

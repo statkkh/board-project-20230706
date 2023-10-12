@@ -20,7 +20,7 @@ const useBoardStore = create<BoardStore>((set) => ({
     setTitle: (title: string) => {set((state) => ({ ...state, title }))},
     setContents: (contents: string) => {set((state) => ({ ...state, contents }))},
     setImages: (images: File[]) => {set((state) => ({ ...state, images }))},
-    // 게시물 작성중 다른 페이지 이동후 다시 왔을 때 reset 
+    // description : 게시물 작성중 다른 페이지 이동후 다시 왔을 때 reset //
     resetBoard: () => {set((state) => ({ ...state, title: '', contents: '', images: [] }))}
 }));
 
