@@ -123,7 +123,7 @@ export default function BoardDetail() {
           <div className='board-detail-title'>{board?.title}</div>
           <div className='board-detail-sub-box'>
             <div className="board-detail-write-info-box">
-              <div className= 'board-detail-writer-profile-image' style={{ backgroundImage: `url(${DefaultProfileImage})` }}></div>
+              <div className= 'board-detail-writer-profile-image' style={{ backgroundImage: `url(${board?.writerProfileImage ? board.writerProfileImage : DefaultProfileImage})` }}></div>
               <div className= 'board-detail-writer-nickname' onClick={onNicknameClickHandler} >{board?.writerNickname}</div>
               <div className="board-detail-info-divider">{'\|'}</div>
               <div className="board-detail-write-date">{getWriteDatetimeFormat(board?.writeDatetime)}</div>

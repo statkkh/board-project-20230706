@@ -6,8 +6,7 @@ import { GetSignInUserResponseDto, GetUserReponseDto, PatchNicknameResponseDto, 
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./dto/request/board";
 import { PostBoardResponseDto, GetLatestBoardListResponseDto , GetBoardResponseDto, GetFavoriteListResponseDto, PutFavoriteResponseDto, GetCommentListResponseDto, PostCommentResponseDto, PatchBoardResponseDto, DeleteBoardResponseDto, GetUserBoardListResponseDto, IncreaseViewCountResponseDto, GetTop3BoardListResponseDto, GetSearchBoardListResponstDto} from "./dto/response/board";
 import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from "./dto/request/user";
-import { GetPopularListResponseDto } from "./dto/response/search";
-
+import { GetPopularListResponseDto, GetRelationListResponseDto } from "./dto/response/search";
 
 // description : Domain URL //
 const DOMAIN = "http://localhost:4000";
@@ -278,7 +277,9 @@ export const putFavoriteRequest = async( boardNumber : string | number , token :
 }
 // description : get popular list API end ppoint //
 const GET_POPULAR_LIST_URL = ( ) => `${API_DOMAIN}/search/popular-list`;
-// description : get sign in use API end Point Request //
+// description : get relation list API end Point//
+const GET_RELATION_LIST_URL = (searchWord : string ) => `${API_DOMAIN}/search/${searchWord}/relation-list`;
+// description : get sign in use API end Point  //
 const GET_SIGN_IN_USER_URL = () => `${API_DOMAIN}/user`;
 // description: get user API end point //
 const GET_USER_URL = (email : string) => `${API_DOMAIN}/user/${email}`;
@@ -300,7 +301,19 @@ export const getPopularListRequest = async() => {
         });
     return result;
 }
-
+// description : get relatino list //
+export const getRelationListRequest = async (searchWord:string) => {
+    const result = await axios.get(GET_RELATION_LIST_URL(searchWord))
+        .then(response =>{
+            const responseBody : GetRelationListResponseDto = response.data;    
+            return responseBody;
+        })
+        .catch(error =>{
+            const responseBody : ResponseDto = error.response.data;
+            return responseBody;
+        });
+    return result;        
+}
 // description :  get sign in request //
 export const getSignInUserRequest = async (token : string) => {
     const result = await axios.get( GET_SIGN_IN_USER_URL(), authorization(token))
@@ -382,3 +395,4 @@ export const fileUploadRequest = async (data: FormData) => {
     return result;
 } 
  
+

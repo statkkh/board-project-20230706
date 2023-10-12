@@ -8,8 +8,9 @@ import BoardItem from 'components/BoardItem';
 import Pagination from 'components/Pagination';
 import { BoardListItem } from 'types';
 import { GetSearchBoardListResponstDto } from 'apis/dto/response/board';
-import { getSearchWordBoardListRequest } from 'apis';
+import { getRelationListRequest, getSearchWordBoardListRequest } from 'apis';
 import ResponseDto from 'apis/dto/response';
+import { GetRelationListResponseDto } from 'apis/dto/response/search';
 
 //          component: 검색 페이지          //
 export default function Search() {
@@ -30,9 +31,9 @@ export default function Search() {
 
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
-  // function : get word get Search Word BoardListResponse //
-  const getSearchWordBoardListResponse = (responseBody : GetSearchBoardListResponstDto | ResponseDto) =>{
-    const {code } = responseBody;
+  // function : get word get search  board  list response //
+  const getSearchBoardListResponse = (responseBody : GetSearchBoardListResponstDto | ResponseDto) =>{
+    const { code } = responseBody;
     if(code ==='DBE') alert('데이터 베이스 오류입니다.');
     if(code !== 'SU') return;
 
@@ -40,6 +41,14 @@ export default function Search() {
     setBoardList(searchList);
     setCount(searchList.length);
     setPreSearchWord(word);
+  }
+  // function : get  relation list response //
+  const getRelationListResponse = (responseBody : GetRelationListResponseDto | ResponseDto)=>{
+      const { code } = responseBody;
+      if(code ==='DBE') alert('데이터 베이스 오류입니다.');
+      
+      const {relativeWordList } = responseBody as GetRelationListResponseDto;
+      setRelationWordList(relativeWordList);
   }
   //          event handler: 관련 검색어 뱃지 클릭 이벤트 처리          //
   const onWordBadgeClickHandler = (word: string) => {
@@ -53,8 +62,8 @@ export default function Search() {
       return;
     }
     if (!word) return;
-    getSearchWordBoardListRequest(word, preSearchWord).then(getSearchWordBoardListResponse);
-    setRelationWordList(relationWordListMock);
+    getSearchWordBoardListRequest(word, preSearchWord).then(getSearchBoardListResponse);
+    getRelationListRequest(word).then(getRelationListResponse);
   }, [word, effectFlag]);  
 
   //          render: 검색 페이지 렌더링          //  
