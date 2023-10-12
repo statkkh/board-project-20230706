@@ -10,8 +10,9 @@ import Pagination from 'components/Pagination';
 import { usePagination } from 'hooks';
 import GetLatestBoardListResponseDto from 'apis/dto/response/board/get-latest-board-list.response.dto';
 import ResponseDto from 'apis/dto/response';
-import { getLatestBoardListRequest, getTop3BoardListRequest } from 'apis';
+import { getLatestBoardListRequest, getPopularListRequest, getTop3BoardListRequest } from 'apis';
 import { GetTop3BoardListResponseDto } from 'apis/dto/response/board';
+import { GetPopularListResponseDto } from 'apis/dto/response/search';
 
 //          component: 메인 페이지          //
 export default function Main() {
@@ -71,6 +72,15 @@ export default function Main() {
       setBoardList(latestList);
     }
 
+    //          function: get  popular list response 처리 함수 //
+    const getPopularListResponse = (responseBody : GetPopularListResponseDto | ResponseDto) =>{
+      const {code} = responseBody;
+      if(code === 'DBE') alert('데이터 베이스 오류입니다.');
+      if(code !== 'SU') return;
+
+      const { popularWordList } = responseBody as GetPopularListResponseDto;
+      setPopularWordList(popularWordList);
+    }
     //          event handler: 인기 검색어 뱃지 클릭 이벤트 처리          //
     const onWordBadgeClickHandler = (word: string) => {
       navagator(SEARCH_PATH(word));
@@ -78,8 +88,7 @@ export default function Main() {
 
     //          effect: 컴포넌트 마운트 시 인기 검색어 리스트 불러오기          //
     useEffect(() => {
-      // TODO: API 호출로 변경
-      setPopularWordList(popularWordListMock);
+      getPopularListRequest().then(getPopularListResponse);
       getLatestBoardListRequest().then(getLatestBoardListResponse);
     }, []);
 

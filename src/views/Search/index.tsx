@@ -16,12 +16,11 @@ export default function Search() {
 
   //          state: 검색어 path variable 상태          //
   const {word} = useParams();
-  //          state:                    //
+  //          state:  페이지네이션 관련 상태                  //
   const {currentPageNumber, currentSectionNumber, setCurrentPageNumber, setCurrentSectionNumber,
      viewBoardList, viewPageNumberList, totalSection, setBoardList} = usePagination<BoardListItem>(5); 
   //          state: 검색 결과 개수 상태          //
   const [count, setCount] = useState<number>(0);   
-
   //          state: 연관 검색어 리스트 상태          //
   const [relationWordList, setRelationWordList] = useState<string[]>([]);  
   //          state: 이전 검색어 상태          //
@@ -31,7 +30,7 @@ export default function Search() {
 
   //          function: 네비게이트 함수          //
   const navigator = useNavigate();
-  // function : get word getSearchWordBoardListResponse //
+  // function : get word get Search Word BoardListResponse //
   const getSearchWordBoardListResponse = (responseBody : GetSearchBoardListResponstDto | ResponseDto) =>{
     const {code } = responseBody;
     if(code ==='DBE') alert('데이터 베이스 오류입니다.');
